@@ -15,5 +15,22 @@ License URI: licence/GPL.txt
 */
 class UniqueHoverSliderPlus
 {
-    // ...
+    /**
+     * Registers the shortcode.
+     */
+    public function __construct()
+    {
+        add_shortcode('uhsp', [$this, 'render']);
+    }
+
+    /**
+     * Renders the HTML.
+     * @return string
+     */
+    public function render()
+    {
+        return file_get_contents(ABSPATH . 'wp-content/plugins/unique-hover-slider-plus/index.php');
+    }
 }
+
+$uhsp = new UniqueHoverSliderPlus();
