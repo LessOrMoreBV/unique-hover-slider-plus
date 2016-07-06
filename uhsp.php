@@ -13,27 +13,54 @@ Version: 0.1.0
 License: GNU General Public License
 License URI: licence/GPL.txt
 */
-class UniqueHoverSliderPlus
+
+// Include base plugin class.
+require_once('core/Plugin.php');
+
+class UniqueHoverSliderPlus extends Plugin
 {
     /**
-     * Registers the shortcode.
+     * Debug mode toggle.
+     * @var boolean
      */
-    public function __construct()
+    protected $debug = false;
+
+    /**
+     * The plugin name.
+     * @var string
+     */
+    protected $name = 'Unique Hover Slider Plus';
+
+    /**
+     * The plugin slug.
+     * @var string
+     */
+    protected $slug = 'unique-hover-slider-plus';
+
+    /**
+     * The theme version.
+     * @var string
+     */
+    protected $version = '0.1.0';
+
+    /**
+     * Loads assets. Automatically called after 'wp_enqueue_scripts' hook.
+     * @hook   wp_enqueue_scripts
+     * @return void
+     */
+    public function assets()
     {
-        define('PLUGIN_DIR', ABSPATH . 'wp-content/plugins/unique-hover-slider-plus/');
-        define('PLUGIN_URI', plugins_url('unique-hover-slider-plus/'));
-        add_action('wp_enqueue_scripts', [$this, 'load']);
-        add_shortcode('uhsp', [$this, 'render']);
+        $this->enqueue_script('script', 'script.js', ['jquery']);
+        $this->enqueue_style('style', 'stylesheet.min.css');
     }
 
     /**
-     * Loads assets.
+     * Automatically called when the class is done booting.
      * @return void
      */
-    public function load()
+    public function boot()
     {
-        wp_enqueue_script('uhsp-app', PLUGIN_URI . 'assets/script.js', ['jquery']);
-        wp_enqueue_style('uhsp-css', PLUGIN_URI . 'assets/stylesheet.min.css');
+        $this->add_shortcode('uhsp', 'render');
     }
 
     /**
@@ -42,7 +69,13 @@ class UniqueHoverSliderPlus
      */
     public function render()
     {
-        require(PLUGIN_DIR . 'index.php');
+        // #TODO: Make better, screw ob.
+        ob_start();
+        define('PLUGIN_URI', $this->get_uri('plugin'));
+        include $this->get_dir('plugin') . 'index.php';
+        $template = ob_get_contents(); // get contents of buffer
+        ob_end_clean();
+        return $template;
     }
 }
 
