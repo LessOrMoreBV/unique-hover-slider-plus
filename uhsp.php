@@ -20,7 +20,20 @@ class UniqueHoverSliderPlus
      */
     public function __construct()
     {
+        define('PLUGIN_DIR', ABSPATH . 'wp-content/plugins/unique-hover-slider-plus/');
+        define('PLUGIN_URI', plugins_url('unique-hover-slider-plus/'));
+        add_action('wp_enqueue_scripts', [$this, 'load']);
         add_shortcode('uhsp', [$this, 'render']);
+    }
+
+    /**
+     * Loads assets.
+     * @return void
+     */
+    public function load()
+    {
+        wp_enqueue_script('uhsp-app', PLUGIN_URI . 'assets/script.js', ['jquery']);
+        wp_enqueue_style('uhsp-css', PLUGIN_URI . 'assets/stylesheet.min.css');
     }
 
     /**
@@ -29,7 +42,7 @@ class UniqueHoverSliderPlus
      */
     public function render()
     {
-        return file_get_contents(ABSPATH . 'wp-content/plugins/unique-hover-slider-plus/index.php');
+        require(PLUGIN_DIR . 'index.php');
     }
 }
 
