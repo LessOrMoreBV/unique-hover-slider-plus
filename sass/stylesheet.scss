@@ -1,0 +1,247 @@
+@import "compass/css3/box-sizing";
+@import "compass/css3/transition";
+
+body {
+    margin: 0;
+}
+
+@mixin mobile {  @media only screen and (max-width: 667px) { @content; } }
+@mixin mini {    @media only screen and (max-width: 800px) { @content; } }
+@mixin tablet {  @media only screen and (max-width: 1024px) { @content; } }
+@mixin desktop { @media only screen and (max-width: $uhsp-maxWidth) { @content; } }
+
+$uhsp-blue:              #334D5C;
+$uhsp-yellow:            #F5C949;
+$uhsp-height:            700px;
+$uhsp-maxWidth:          1480px;
+$uhsp-responsivePadding: calc((100vw - #{$uhsp-maxWidth}) / 2);
+
+.uhsp-slider-wrapper {
+    -webkit-font-smoothing: antialiased;
+    font-family: sans-serif;
+    height: $uhsp-height;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    width: 100vw;
+    & > * {
+        @include box-sizing(border-box);
+    }
+    @include tablet {
+        height: 600px;
+    }
+    @include mobile {
+        height: 400px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .uhsp-left,
+    .uhsp-right {
+        color: white;
+        cursor: pointer;
+        fill: none;
+        height: $uhsp-height;
+        line-height: $uhsp-height;
+        position: absolute;
+        stroke: white;
+        text-align: center;
+        width: 40px;
+        z-index: 1;
+        @include tablet {
+            height: 600px;
+            line-height: 600px;
+        }
+        @include mobile {
+            height: 400px;
+            line-height: 400px;
+        }
+
+        svg {
+            height: 34px;
+        }
+    }
+
+    .uhsp-left {
+        @include transition(padding-left .15s ease);
+        left: 0;
+        opacity: 1;
+        padding-left: 10px;
+        z-index: 2;
+        &:hover {
+            padding-left: 6px;
+        }
+    }
+
+    .uhsp-right {
+        @include transition(padding-right .15s ease);
+        opacity: 1;
+        padding-right: 10px;
+        right: 0;
+        z-index: 2;
+        &:hover {
+            padding-right: 6px;
+        }
+    }
+
+    .uhsp-slider-titles {
+        bottom: 80px;
+        left: calc((100vw - #{$uhsp-maxWidth}) / 2);
+        padding: 0 20px;
+        position: absolute;
+        width: $uhsp-maxWidth;
+        z-index: 2;
+        @include desktop {
+            left: 0;
+            width: 100%;
+        }
+        @include tablet {
+            bottom: 70px;
+        }
+        @include mobile {
+            bottom: 20px;
+        }
+
+        .uhsp-hover-bar {
+            @include transition(left .3s ease);
+            background-color: $uhsp-yellow;
+            height: 2px;
+            left: 36.3%;
+            position: absolute;
+            top: -1px;
+            width: 27%;
+            @include mobile {
+                display: none;
+            }
+        }
+        .uhsp-first-title:hover ~ .uhsp-hover-bar {
+            left: calc(3% + 20px) !important;
+        }
+        .uhsp-second-title:hover ~ .uhsp-hover-bar {
+            left: 36.3% !important;
+        }
+        .uhsp-third-title:hover ~ .uhsp-hover-bar {
+            left: calc((100% - 20px) - 30%) !important;
+        }
+
+        ul.uhsp-title-list {
+            border-top: 1px solid mix(transparent, white, 75%);
+            list-style: none;
+            padding: 3px 0 0 0;
+            position: relative;
+            @include mobile {
+                border-top: none;
+                left: -100%;
+                width: 300%;
+            }
+
+            li.uhsp-first-title,
+            li.uhsp-second-title,
+            li.uhsp-third-title {
+                cursor: pointer;
+                float: left;
+                line-height: 1.3;
+                text-align: center;
+                width: calc(100% / 3);
+
+                h2.uhsp-slide-title {
+                    @include transition(opacity .3s ease);
+                    color: $uhsp-yellow;
+                    cursor: pointer;
+                    font-size: 30px;
+                    font-weight: 400;
+                    margin: 0;
+                    opacity: 0.3;
+                    @include tablet {
+                        font-size: 25px;
+                    }
+                    @include mobile {
+                        font-size: 18px;
+                    }
+                }
+
+                p.uhsp-slide-subtitle {
+                    @include transition(opacity .3s ease);
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 400;
+                    margin: 0;
+                    opacity: 0.3;
+                }
+
+                &.selected {
+                    h2.uhsp-slide-title {
+                        opacity: 1;
+                        padding: 0;
+                    }
+                    p.uhsp-slide-subtitle {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    .uhsp-slider-images {
+        height: $uhsp-height;
+        left: -100vw;
+        opacity: 1;
+        overflow: hidden;
+        position: relative;
+        white-space: nowrap;
+        width: 300vw;
+        z-index: 1;
+        @include tablet {
+            height: 600px;
+        }
+        @include mobile {
+            height: 400px;
+        }
+
+        .uhsp-single-slide {
+            @include box-sizing(border-box);
+            background-position: center center;
+            background-size: cover;
+            display: inline-block;
+            height: 100%;
+            padding: 0 $uhsp-responsivePadding;
+            position: relative;
+            white-space: initial;
+            width: 100vw;
+
+            img.uhsp-single-image {
+                bottom: 200px;
+                height: 36%;
+                left: calc(50% - 220px);
+                max-height: 36%;
+                min-height: 36%;
+                position: absolute;
+                width: 440px;
+                z-index: 1;
+                @include tablet {
+                    height: 220px;
+                    left: calc(50% - 162px);
+                    width: 324px;
+                }
+                @include mobile {
+                    bottom: 130px;
+                    height: 105px;
+                    left: calc(50% - 75px);
+                    width: 150px;
+                }
+            }
+
+            .ushp-slide-overlay {
+                background-color: mix($uhsp-blue, transparent, 75);
+                height: 100%;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+                z-index: 0;
+            }
+        }
+    }
+}
