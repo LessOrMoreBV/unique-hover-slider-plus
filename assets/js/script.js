@@ -26,14 +26,17 @@
             return 1;
         };
 
+        var singleSlide = $(".uhsp-single-slide"),
+            availableSlides = singleSlide.length;
+
         /**
          * Make the slider responsive.
          */
         $(window).on('resize', function() {
-            var slideWidth = $(".uhsp-single-slide").outerWidth(true);
+            var slideWidth = singleSlide.outerWidth(true);
 
-            if (i > $(".uhsp-single-slide").length - getVisibleSlideCount()) {
-                i = $(".uhsp-single-slide").length - getVisibleSlideCount();
+            if (i > availableSlides - getVisibleSlideCount()) {
+                i = availableSlides - getVisibleSlideCount();
             }
 
             $(".uhsp-slider-images").animate({
@@ -44,17 +47,17 @@
         /**
          * Show arrows when more then 3 slides.
          */
-        if ($(".uhsp-single-slide").length <= getVisibleSlideCount()) {
+        if (availableSlides <= getVisibleSlideCount()) {
             $(".uhsp-slider-wrapper > .uhsp-right").hide();
             $(".uhsp-slider-wrapper > .uhsp-left").hide();
         };
 
         $(".uhsp-slider-wrapper > .uhsp-right").on('click', function() {
             $(".uhsp-slider-wrapper > .uhsp-left").show();
-            if (i < $(".uhsp-single-slide").length - getVisibleSlideCount()) {
-                var slideWidth = $(".uhsp-single-slide").outerWidth(true);
+            if (i < availableSlides - getVisibleSlideCount()) {
+                var slideWidth = singleSlide.outerWidth(true);
                 i++;
-                if (i >= $(".uhsp-single-slide").length - getVisibleSlideCount()) {
+                if (i >= availableSlides - getVisibleSlideCount()) {
                     $(this).hide();
                 }
 
@@ -62,12 +65,13 @@
                     left: 0 - slideWidth * i
                 }, 600, "swing");
             }
+            changeState();
         });
 
         $(".uhsp-slider-wrapper > .uhsp-left").on('click', function() {
             $(".uhsp-slider-wrapper > .uhsp-right").show();
             if (i > 0) {
-                var slideWidth = $(".uhsp-single-slide").outerWidth(true);
+                var slideWidth = singleSlide.outerWidth(true);
                 i--;
                 if (i <= 0) {
                     $(this).hide();
@@ -77,33 +81,37 @@
                     left: 0 - slideWidth * i
                 }, 600, "swing");
             }
+            changeState();
         });
 
         /**
          * Change the style of the slider text when you go to a different slide.
          */
         var changeState = function() {
-            var ww = $(window).width();
+            var ww = $(window).width(),
+                slideCount = Number(i) + 1,
+                barPosition = Number(i) * (100 / availableSlides) + "%";
+
+            /**
+             * When clicked on one the title, first remove all the selected states.
+             */
             $(".uhsp-slider-titles li").removeClass("selected");
 
-            if (i === 0) {
-                $(".uhsp-first-title").addClass("selected");
-                $(".uhsp-hover-bar").css("left", "calc(3% + 20px)");
-                if (ww <= 667) {
-                    $('.uhsp-slider-titles ul').animate({left: 0}, 600, "swing");
-                }
-            } else if (i === 1) {
-                $(".uhsp-second-title").addClass("selected");
-                $(".uhsp-hover-bar").css("left", "36.3%");
-                if (ww <= 667) {
-                    $('.uhsp-slider-titles ul').animate({left: "-100%"}, 600, "swing");
-                }
-            } else if (i === 2) {
-                $(".uhsp-third-title").addClass("selected");
-                $(".uhsp-hover-bar").css("left", "calc((100% - 20px) - 30%)");
-                if (ww <= 667) {
-                    $('.uhsp-slider-titles ul').animate({left: "-200%"}, 600, "swing");
-                }
+            /**
+             * Give the title of the slide you're on the selected state.
+             */
+            $(".uhsp-title:nth-child(" + slideCount + ")").addClass("selected");
+
+            /**
+             * Position the hover bar under the selected title.
+             */
+            $(".uhsp-hover-bar").css("left", barPosition);
+
+            /**
+             * On a small screen, animate the titles in and out of the screen.
+             */
+            if (ww <= 667) {
+                $('.uhsp-slider-titles ul').animate({left: i * "-100%"}, 600, "swing");
             }
         };
 
@@ -112,39 +120,21 @@
          */
         var slideSlider = function() {
             $(".uhsp-slider-images").animate({
-                left: 0 - $(".uhsp-single-slide").outerWidth(true) * i
+                left: 0 - singleSlide.outerWidth(true) * i
             }, 600, "swing");
         }
 
-        
-        $(".uhsp-left").on('click', function() {
-            changeState();
-        });
 
-        $(".uhsp-right").on('click', function() {
-            changeState();
-        });
-
-        $("li.uhsp-first-title").on('click', function() {
-            $(".uhsp-slider-wrapper > .uhsp-right").show();
-            $(".uhsp-slider-wrapper > .uhsp-left").hide();
-            i = 0;
-            slideSlider();
-            changeState();
-        });
-
-        $("li.uhsp-second-title").on('click', function() {
+        $("li.uhsp-title").on('click', function() {
             $(".uhsp-slider-wrapper > .uhsp-right").show();
             $(".uhsp-slider-wrapper > .uhsp-left").show();
-            i = 1;
-            slideSlider();
-            changeState();
-        });
-
-        $("li.uhsp-third-title").on('click', function() {
-            $(".uhsp-slider-wrapper > .uhsp-right").hide();
-            $(".uhsp-slider-wrapper > .uhsp-left").show();
-            i = 2;
+            i = $(this).index();
+            if (i === 0) {
+                $(".uhsp-slider-wrapper > .uhsp-left").hide();
+            }
+            if (i === (availableSlides - 1)) {
+                $(".uhsp-slider-wrapper > .uhsp-right").hide();
+            }
             slideSlider();
             changeState();
         });

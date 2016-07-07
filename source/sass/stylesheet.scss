@@ -50,17 +50,28 @@ $uhsp-responsivePadding: calc((100vw - #{$uhsp-maxWidth}) / 2);
         text-align: center;
         width: 40px;
         z-index: 1;
+
+        svg {
+            height: 700px;
+            width: 18px;
+        }
+
         @include tablet {
             height: 600px;
             line-height: 600px;
+
+            svg {
+                height: 600px;
+            }
         }
+
         @include mobile {
             height: 400px;
             line-height: 400px;
-        }
 
-        svg {
-            height: 34px;
+            svg {
+                height: 400px;
+            }
         }
     }
 
@@ -106,24 +117,30 @@ $uhsp-responsivePadding: calc((100vw - #{$uhsp-maxWidth}) / 2);
 
         .uhsp-hover-bar {
             @include transition(left .3s ease);
-            background-color: $uhsp-yellow;
             height: 2px;
-            left: 36.3%;
+            left: 33.33%;
+            padding: 0 3%;
             position: absolute;
             top: -1px;
-            width: 27%;
+            width: 33.33%;
+            .uhsp-hover-bar-color {
+                background-color: $uhsp-yellow;
+                height: 2px;
+                width: 100%;
+            }
+
             @include mobile {
                 display: none;
             }
         }
-        .uhsp-first-title:hover ~ .uhsp-hover-bar {
-            left: calc(3% + 20px) !important;
+        .uhsp-title:nth-child(1):hover ~ .uhsp-hover-bar {
+            left: 0 !important;
         }
-        .uhsp-second-title:hover ~ .uhsp-hover-bar {
-            left: 36.3% !important;
+        .uhsp-title:nth-child(2):hover ~ .uhsp-hover-bar {
+            left: 33.33% !important;
         }
-        .uhsp-third-title:hover ~ .uhsp-hover-bar {
-            left: calc((100% - 20px) - 30%) !important;
+        .uhsp-title:nth-child(3):hover ~ .uhsp-hover-bar {
+            left: 66.67% !important;
         }
 
         ul.uhsp-title-list {
@@ -137,9 +154,7 @@ $uhsp-responsivePadding: calc((100vw - #{$uhsp-maxWidth}) / 2);
                 width: 300%;
             }
 
-            li.uhsp-first-title,
-            li.uhsp-second-title,
-            li.uhsp-third-title {
+            li.uhsp-title {
                 cursor: pointer;
                 float: left;
                 line-height: 1.3;

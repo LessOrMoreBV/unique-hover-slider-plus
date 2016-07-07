@@ -32,8 +32,8 @@ class UniqueHoverSliderPlus
      */
     public function load()
     {
-        wp_enqueue_script('uhsp-app', PLUGIN_URI . 'assets/script.js', ['jquery']);
-        wp_enqueue_style('uhsp-css', PLUGIN_URI . 'assets/stylesheet.min.css');
+        wp_enqueue_script('uhsp-app', PLUGIN_URI . 'assets/js/script.js', ['jquery']);
+        wp_enqueue_style('uhsp-css', PLUGIN_URI . 'assets/css/stylesheet.min.css');
     }
 
     /**
