@@ -81,6 +81,12 @@ abstract class Plugin
     protected $uris = [];
 
     /**
+     * A list of hooks and their method registration.
+     * @var array
+     */
+    protected $hooks = [];
+
+    /**
      * Merges the URI and directory listings.
      */
     public function __construct()
@@ -123,8 +129,12 @@ abstract class Plugin
     public function register_actions()
     {
         // Define static actions that should always happen.
-        $this->add_action('wp_enqueue_scripts', 'assets');
         $this->add_action('admin_menu', 'menus');
+
+        // Attach all hooks registered on the property as well.
+        foreach ($this->hooks as $hook) {
+            call_user_func_array([$this, 'add_action'], $hook);
+        }
     }
 
     /**

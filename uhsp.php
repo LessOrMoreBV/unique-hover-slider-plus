@@ -56,21 +56,30 @@ class UniqueHoverSliderPlus extends Plugin
     protected $version = '0.1.0';
 
     /**
+     * The options used by this plugin.
+     * @var array
+     */
+    protected $options = [
+        'sliders' => [],
+    ];
+
+    /**
      * Top level menu pages. Please don't add more than one.. and make
      * sure that the one you do add is really required to be a top level
      * menu item.
      * @var array
      */
     protected $menu_pages = [
-        ['menu_dashboard', 'images/icon.png']
+        ['menu_dashboard', 'images/icon.png'],
     ];
 
     /**
-     * The options used by this plugin.
+     * Hooks automatically registered during the boot
+     * sequence of the class.
      * @var array
      */
-    protected $options = [
-        'sliders' => []
+    protected $hooks = [
+        ['wp_enqueue_scripts', 'assets'],
     ];
 
     /**
