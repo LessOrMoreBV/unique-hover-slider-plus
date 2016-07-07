@@ -1,4 +1,9 @@
 <?php
+// Exit if accessed directly
+if (! defined('ABSPATH')) {
+    exit('No direct script access allowed');
+}
+
 /**
  * @package Unique Hover Slider Plus
  * @version 0.1.0
@@ -16,6 +21,7 @@ License URI: licence/GPL.txt
 
 // Include base plugin class.
 require_once('core/Plugin.php');
+use UniqueHoverSliderPlus\Core\Plugin;
 
 class UniqueHoverSliderPlus extends Plugin
 {
