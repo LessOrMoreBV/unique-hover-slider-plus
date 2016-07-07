@@ -1,4 +1,9 @@
 <?php
+// Exit if accessed directly
+if (! defined('ABSPATH')) {
+    exit('No direct script access allowed');
+}
+
 /**
  * @package Unique Hover Slider Plus
  * @version 0.1.0
@@ -13,36 +18,94 @@ Version: 0.1.0
 License: GNU General Public License
 License URI: licence/GPL.txt
 */
-class UniqueHoverSliderPlus
+
+// Include base plugin class.
+require_once('core/Plugin.php');
+use UniqueHoverSliderPlus\Core\Plugin;
+
+class UniqueHoverSliderPlus extends Plugin
 {
     /**
-     * Registers the shortcode.
+     * Debug mode toggle.
+     * @var boolean
      */
-    public function __construct()
-    {
-        define('PLUGIN_DIR', ABSPATH . 'wp-content/plugins/unique-hover-slider-plus/');
-        define('PLUGIN_URI', plugins_url('unique-hover-slider-plus/'));
-        add_action('wp_enqueue_scripts', [$this, 'load']);
-        add_shortcode('uhsp', [$this, 'render']);
-    }
+    protected $debug = false;
 
     /**
-     * Loads assets.
+     * The plugin name.
+     * @var string
+     */
+    protected $name = 'Unique Hover Slider Plus';
+
+    /**
+     * The plugin slug.
+     * @var string
+     */
+    protected $slug = 'unique-hover-slider-plus';
+
+    /**
+     * A shortened name for menu displays.
+     * @var string
+     */
+    protected $short_name = 'UHSP Slider';
+
+    /**
+     * The theme version.
+     * @var string
+     */
+    protected $version = '0.1.0';
+
+    /**
+     * Top level menu pages. Please don't add more than one.. and make
+     * sure that the one you do add is really required to be a top level
+     * menu item.
+     * @var array
+     */
+    protected $menu_pages = [
+        ['menu_dashboard', 'images/icon.png']
+    ];
+
+    /**
+     * Loads assets. Automatically called after 'wp_enqueue_scripts' hook.
+     * @hook   wp_enqueue_scripts
      * @return void
      */
-    public function load()
+    public function assets()
     {
-        wp_enqueue_script('uhsp-app', PLUGIN_URI . 'assets/js/script.js', ['jquery']);
-        wp_enqueue_style('uhsp-css', PLUGIN_URI . 'assets/css/stylesheet.min.css');
+        $this->enqueue_script('script', 'js/script.js', ['jquery']);
+        $this->enqueue_style('style', 'css/stylesheet.min.css');
     }
 
     /**
-     * Renders the HTML.
+     * What the options page should look like. Automatically called as part
+     * of the add_options_page method which in turn is called on the admin_menu
+     * hook.
+     * @hook   admin_menu
+     * @return void
+     */
+    public function menu_dashboard()
+    {
+        // Kills the page if the user doesn't have enough permissions.
+        $this->check_user_permission('modify');
+        echo $this->render_template('menu_dashboard.php');
+    }
+
+    /**
+     * Automatically called when the class is done booting.
+     * @return void
+     */
+    public function boot()
+    {
+        $this->add_shortcode('uhsp', 'render');
+    }
+
+    /**
+     * Renders the slider as HTML.
      * @return string
      */
     public function render()
     {
-        require(PLUGIN_DIR . 'index.php');
+        return $this->render_template('slider.php');
     }
 }
 
