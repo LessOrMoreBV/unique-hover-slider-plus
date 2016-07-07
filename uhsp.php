@@ -66,6 +66,14 @@ class UniqueHoverSliderPlus extends Plugin
     ];
 
     /**
+     * The options used by this plugin.
+     * @var array
+     */
+    protected $options = [
+        'sliders' => []
+    ];
+
+    /**
      * Loads assets. Automatically called after 'wp_enqueue_scripts' hook.
      * @hook   wp_enqueue_scripts
      * @return void

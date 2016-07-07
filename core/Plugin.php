@@ -85,17 +85,46 @@ abstract class Plugin
      */
     public function __construct()
     {
+        $this->init_properties();
+        $this->register_options();
+        $this->register_actions();
+
+        // Call a boot method to indicate that we're ready.
+        $this->boot();
+    }
+
+    /**
+     * Initializes directory and uri props.
+     * @return void
+     */
+    public function init_properties()
+    {
         // Combine _directories and directories to create a single
         // array of constants. Same goes for URI's.
         $this->directories = array_merge($this->_directories, $this->directories);
         $this->uris = array_merge($this->_uris, $this->uris);
+    }
 
+    /**
+     * Registers options used by the plugin.
+     * @return void
+     */
+    public function register_options()
+    {
+        foreach ($this->options as $key => $value) {
+            add_option(str_replace('-', '_', $this->prefix($key)), $value);
+        }
+    }
+
+    /**
+     * Registers all the hooks.
+     * @return void
+     */
+    public function register_actions()
+    {
         // Define static actions that should always happen.
         $this->add_action('wp_enqueue_scripts', 'assets');
         $this->add_action('admin_menu', 'menus');
-
-        // Call a boot method to indicate that we're ready.
-        $this->boot();
     }
 
     /**
@@ -117,6 +146,16 @@ abstract class Plugin
         if (!call_user_func([$this, 'user_can_' . $permission])) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
+    }
+
+    /**
+     * Prepends the plugin slug to the given string.
+     * @param  string $str
+     * @return string
+     */
+    public function prefix($str)
+    {
+        return "{$this->slug}-{$str}";
     }
 
     /**
