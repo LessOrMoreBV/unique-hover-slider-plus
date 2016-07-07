@@ -44,10 +44,26 @@ class UniqueHoverSliderPlus extends Plugin
     protected $slug = 'unique-hover-slider-plus';
 
     /**
+     * A shortened name for menu displays.
+     * @var string
+     */
+    protected $short_name = 'UHSP Slider';
+
+    /**
      * The theme version.
      * @var string
      */
     protected $version = '0.1.0';
+
+    /**
+     * Top level menu pages. Please don't add more than one.. and make
+     * sure that the one you do add is really required to be a top level
+     * menu item.
+     * @var array
+     */
+    protected $menu_pages = [
+        ['menu_dashboard', 'images/icon.png']
+    ];
 
     /**
      * Loads assets. Automatically called after 'wp_enqueue_scripts' hook.
@@ -61,6 +77,20 @@ class UniqueHoverSliderPlus extends Plugin
     }
 
     /**
+     * What the options page should look like. Automatically called as part
+     * of the add_options_page method which in turn is called on the admin_menu
+     * hook.
+     * @hook   admin_menu
+     * @return void
+     */
+    public function menu_dashboard()
+    {
+        // Kills the page if the user doesn't have enough permissions.
+        $this->check_user_permission('modify');
+        echo $this->render_template('menu_dashboard.php');
+    }
+
+    /**
      * Automatically called when the class is done booting.
      * @return void
      */
@@ -70,18 +100,12 @@ class UniqueHoverSliderPlus extends Plugin
     }
 
     /**
-     * Renders the HTML.
+     * Renders the slider as HTML.
      * @return string
      */
     public function render()
     {
-        // #TODO: Make better, screw ob.
-        ob_start();
-        define('PLUGIN_URI', $this->get_uri('plugin'));
-        include $this->get_dir('plugin') . 'index.php';
-        $template = ob_get_contents(); // get contents of buffer
-        ob_end_clean();
-        return $template;
+        return $this->render_template('slider.php');
     }
 }
 

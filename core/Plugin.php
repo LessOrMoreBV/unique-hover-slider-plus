@@ -22,6 +22,12 @@ abstract class Plugin
     protected $name = 'My Plugin';
 
     /**
+     * A shortened name for menu displays.
+     * @var string
+     */
+    protected $short_name = 'MP';
+
+    /**
      * The plugin slug.
      * @var string
      */
@@ -34,6 +40,12 @@ abstract class Plugin
     protected $version = '0.0.0';
 
     /**
+     * The user capability required to edit this plugin.
+     * @var string
+     */
+    protected $capability = 'manage_options';
+
+    /**
      * The d efault directories to be extended by the
      * directories property below it.
      * @var array
@@ -42,6 +54,7 @@ abstract class Plugin
         'plugin' => '/',
         'assets' => '/assets',
         'images' => '/images',
+        'templates' => '/templates',
     ];
 
     /**
@@ -79,9 +92,31 @@ abstract class Plugin
 
         // Define static actions that should always happen.
         $this->add_action('wp_enqueue_scripts', 'assets');
+        $this->add_action('admin_menu', 'menus');
 
         // Call a boot method to indicate that we're ready.
         $this->boot();
+    }
+
+    /**
+     * Checks if the user can edit this plugin.
+     * @return boolean
+     */
+    public function user_can_modify()
+    {
+        return current_user_can($this->capability);
+    }
+
+    /**
+     * Kills the page if the user doesn't have enough permissions.
+     * @param  string $permission
+     * @return void
+     */
+    public function check_user_permission($permission)
+    {
+        if (!call_user_func([$this, 'user_can_' . $permission])) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
     }
 
     /**
@@ -111,6 +146,37 @@ abstract class Plugin
     }
 
     /**
+     * Retrieves the full path to a given template.
+     * @param  string $file
+     * @return string
+     */
+    public function template($file)
+    {
+        $file = $this->trim_prepended_slash($file);
+        return $this->get_dir('templates') . "/{$file}";
+    }
+
+    /**
+     * Renders the given template using ob_get_contents.
+     * @param  string $file
+     * @return string
+     */
+    public function render_template($file)
+    {
+        // Resolve to full file path.
+        $file = $this->template($file);
+
+        // #TODO: Make better, screw ob.
+        ob_start();
+        define('PLUGIN_URI', $this->get_uri('plugin'));
+        include $file;
+        $template = ob_get_contents(); // get contents of buffer
+        ob_end_clean();
+
+        return $template;
+    }
+
+    /**
      * Retrieves the given directory as a full URI.
      * @param  string $uri
      * @return string
@@ -134,6 +200,17 @@ abstract class Plugin
     public function full_uri($uri)
     {
         return plugins_url("{$this->slug}/{$uri}");
+    }
+
+    /**
+     * Returns the full uri to the given asset file.
+     * @param  string $file
+     * @return string
+     */
+    public function asset($file)
+    {
+        $file = $this->trim_prepended_slash($file);
+        return $this->get_uri('assets') . "/{$file}";
     }
 
     /**
@@ -192,7 +269,7 @@ abstract class Plugin
 
         wp_enqueue_script(
             "{$this->slug}-{$handle}",
-            $this->get_uri('assets') . "/{$file}",
+            $this->asset($file),
             $deps,
             $version,
             $in_footer
@@ -217,11 +294,34 @@ abstract class Plugin
 
         wp_enqueue_style(
             "{$this->slug}-{$handle}",
-            $this->get_uri('assets') . "/{$file}",
+            $this->asset($file),
             $deps,
             $version,
             $media
         );
+    }
+
+    /**
+     * Renders pre-defined menus. Automatically called on 'admin_menu' hook.
+     * @hook   admin_menu
+     * @return void
+     */
+    public function menus()
+    {
+        // Try to add top level domains.
+        $this->menu_pages = array_map(function ($menu_page) {
+            return [
+                $this->name,
+                $this->short_name,
+                $this->capability,
+                $this->slug,
+                [$this, $menu_page[0]],
+                $this->asset($menu_page[1])
+            ];
+        }, $this->menu_pages);
+        foreach ($this->menu_pages as $menu_page) {
+            call_user_func_array('add_menu_page', $menu_page);
+        }
     }
 
     /**
