@@ -301,6 +301,26 @@ abstract class Plugin
     }
 
     /**
+     * Wrapper for isset $_POST.
+     * @param  string  $key
+     * @return boolean
+     */
+    public function has_input($key)
+    {
+        return (isset($_POST[$key]));
+    }
+
+    /**
+     * Wrapper for $_POST[$key].
+     * @param  string $key
+     * @return mixed
+     */
+    public function get_input($key)
+    {
+        return $_POST[$key];
+    }
+
+    /**
      * Enqueue script wrapper that automatically prepends slug to handle
      * and generates a proper uri for the given file.
      * @param  string  $handle

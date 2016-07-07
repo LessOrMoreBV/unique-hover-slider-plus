@@ -104,6 +104,8 @@ class UniqueHoverSliderPlus extends Plugin
     {
         // Kills the page if the user doesn't have enough permissions.
         $this->check_user_permission('modify');
+
+        // Echo the rendered template.
         echo $this->render_template('menu_dashboard.php');
     }
 
@@ -113,6 +115,12 @@ class UniqueHoverSliderPlus extends Plugin
      */
     public function boot()
     {
+        // Update things if there is any input.
+        if ($this->has_input('event')) {
+            $this->handle_input();
+        }
+
+        // Register the shortcode to render the slider.
         $this->add_shortcode('uhsp', 'render');
     }
 
@@ -123,6 +131,31 @@ class UniqueHoverSliderPlus extends Plugin
     public function render()
     {
         return $this->render_template('slider.php');
+    }
+
+    /**
+     * Handles post data to update our plugin.
+     * @return void
+     */
+    public function handle_input()
+    {
+        // Kills the page if the user doesn't have enough permissions.
+        $this->check_user_permission('modify');
+
+        // An event is required to see what action we should take.
+        if ($this->has_input('event')) {
+            switch ($this->get_input('event')) {
+                case 'add_slider':
+                    // #TODO: Add a slider.
+                    break;
+                case 'update_slider':
+                    // #TODO: Update slider.
+                    break;
+                case 'remove_slider':
+                    // #TODO: Remove a slider.
+                    break;
+            }
+        }
     }
 }
 
