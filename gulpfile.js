@@ -22,45 +22,37 @@ function errorAlert(error){
 
 // Compile SCSS to CSS and minify.
 gulp.task('compass', function() {
-    gulp.src('./sass/stylesheet.scss')
+    gulp.src('./source/sass/stylesheet.scss')
     .pipe(plumber({errorHandler: errorAlert}))
     .pipe(compass({
-        css: 'assets',
-        sass: 'sass',
+        css: 'assets/css',
+        sass: 'source/sass',
         image: 'assets/images'
     }))
     .pipe(rename('stylesheet.min.css'))
     .pipe(minifyCss())
-    .pipe(gulp.dest('./assets/'))
+    .pipe(gulp.dest('./assets/css/'))
     .pipe(notify({ title: 'SCSS', message: 'Compiled and minified' }));
 });
 
 // Compile JS and minify.
 gulp.task('scripts', function() {
     return gulp.src([
-        './js/app.js',
-        './js/helpers.js',
-        './js/vendor/contact.js',
-        './js/vendor/maps.js',
-        './js/vendor/jquery.home-slider.js',
-        './js/vendor/slick.min.js',
-        './js/vendor/jquery.project-slider.js',
-        './js/vendor/jquery.vertical-slider.js',
-        './js/vendor/jquery.services.js'
+        './source/js/app.js'
     ])
     .pipe(plumber({errorHandler: errorAlert}))
     .pipe(concat('script.js'))
-    .pipe(gulp.dest('./assets/'))
+    .pipe(gulp.dest('./assets/js/'))
     .pipe(rename('script.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('./assets/'))
+    .pipe(gulp.dest('./assets/js/'))
     .pipe(notify({ title: 'Javascript', message: 'Compiled and minified' }));
 });
 
 // Gulp watch, keep watching while programming.
 gulp.task('watch', function() {
-    gulp.watch('sass/**/*.scss', ['compass']);
-    gulp.watch('js/**/*.js', ['scripts']);
+    gulp.watch('source/sass/**/*.scss', ['compass']);
+    gulp.watch('source/js/**/*.js', ['scripts']);
 });
 
 gulp.task('default', function() {});

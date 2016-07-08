@@ -70,7 +70,8 @@ class UniqueHoverSliderPlus extends Plugin
      * @var array
      */
     protected $menu_pages = [
-        ['menu_dashboard', 'images/icon.png'],
+        ['menu_dashboard', 'images/icon.svg'],
+        // ['menu_dashboard', 'dashicons-images-alt2'],
     ];
 
     /**
@@ -89,8 +90,8 @@ class UniqueHoverSliderPlus extends Plugin
      */
     public function assets()
     {
-        $this->enqueue_script('script', 'script.js', ['jquery']);
-        $this->enqueue_style('style', 'stylesheet.min.css');
+        $this->enqueue_script('script', 'js/script.js', ['jquery']);
+        $this->enqueue_style('style', 'css/stylesheet.min.css');
     }
 
     /**
@@ -122,6 +123,12 @@ class UniqueHoverSliderPlus extends Plugin
 
         // Register the shortcode to render the slider.
         $this->add_shortcode('uhsp', 'render');
+        $this->add_action('wp_head', 'meta_viewport');
+    }
+
+    public function meta_viewport()
+    {
+        echo '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
     }
 
     /**

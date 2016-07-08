@@ -332,7 +332,7 @@ abstract class Plugin
      */
     public function enqueue_script($handle, $file, $deps = [], $version = null, $in_footer = false)
     {
-        if (!version) {
+        if (!$version) {
             $version = $this->version;
         }
 
@@ -357,7 +357,7 @@ abstract class Plugin
      */
     public function enqueue_style($handle, $file, $deps = [], $version = null, $media = 'all')
     {
-        if (!version) {
+        if (!$version) {
             $version = $this->version;
         }
 
@@ -391,6 +391,15 @@ abstract class Plugin
         foreach ($this->menu_pages as $menu_page) {
             call_user_func_array('add_menu_page', $menu_page);
         }
+    }
+
+    /**
+     * For the user to overwrite.
+     * @return void
+     */
+    public function assets()
+    {
+        // ...
     }
 
     /**
