@@ -128,7 +128,7 @@
          * Show the left or right arrow(s) if there are slides to the left and or right.
          * @return {void}
          */
-        $("li.uhsp-title").on('click', function() {
+        $(".uhsp-title").on('click', function() {
             rightArrow.hide();
             leftArrow.hide();
             i = $(this).index();
@@ -150,7 +150,8 @@
         var changeTitleState = function() {
             var ww = $(window).width(),
                 slideCount = Number(i) + 1,
-                barPosition = Number(i) * (100 / availableSlides) + "%";
+                barPosition = Number(i) * (100 / availableSlides) + "%",
+                slideMobile = Number(i) * -100 + '%';
 
             // When clicked on one the title, first remove all the selected states.
             $(".uhsp-title").removeClass("selected");
@@ -163,8 +164,6 @@
 
             // On a small screen, animate the titles in and out of the screen.
             if (ww <= 667) {
-                var slideMobile = Number(i) * -100 + '%';
-
                 $('.uhsp-title-list').animate({left: slideMobile}, 600, "swing");
             }
         };
