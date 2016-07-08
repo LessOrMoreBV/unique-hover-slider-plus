@@ -146,7 +146,7 @@ class UniqueHoverSliderPlus extends Plugin
         if ($this->has_input('event')) {
             switch ($this->get_input('event')) {
                 case 'add_slider':
-                    // #TODO: Add a slider.
+                    die('Yolo');
                     break;
                 case 'update_slider':
                     // #TODO: Update slider.
