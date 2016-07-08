@@ -13,11 +13,11 @@
                 <h2 class="uhsp-slide-title">Web-applicaties</h2>
                 <p class="uhsp-slide-subtitle">waar je feilloos je weg in vindt</p>
             </li>
-            <li class="uhsp-title selected">
+            <li class="uhsp-title">
                 <h2 class="uhsp-slide-title">Websites & webshops</h2>
                 <p class="uhsp-slide-subtitle">die je zelf kunt bijhouden</p>
             </li>
-            <li class="uhsp-title">
+            <li class="uhsp-title ">
                 <h2 class="uhsp-slide-title">Internet of Things</h2>
                 <p class="uhsp-slide-subtitle">de meest innovatieve concepten</p>
             </li>
@@ -31,14 +31,14 @@
         <article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/web-applicaties.jpg')">
             <img class="uhsp-single-image" src="<?= PLUGIN_URI ?>assets/images/web-applicaties.svg" alt="web-applicaties">
             <div class="ushp-slide-overlay"></div>
-        </article><!--
+        </article>
 
-        --><article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/websites.jpg')">
+        <article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/websites.jpg')">
             <img class="uhsp-single-image" src="<?= PLUGIN_URI ?>assets/images/websites.svg" alt="websites">
             <div class="ushp-slide-overlay"></div>
-        </article><!--
-        
-        --><article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/internet-of-things.jpg')">
+        </article>
+
+        <article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/internet-of-things.jpg')">
             <img class="uhsp-single-image" src="<?= PLUGIN_URI ?>assets/images/internet-of-things.svg" alt="internet-of-things">
            <div class="ushp-slide-overlay"></div>
         </article>
