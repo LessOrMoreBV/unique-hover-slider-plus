@@ -19,9 +19,12 @@ License: GNU General Public License
 License URI: licence/GPL.txt
 */
 
-// Include base plugin class.
+
 require_once('core/Plugin.php');
+require_once('post-types/SlidePostType.php');
+
 use UniqueHoverSliderPlus\Core\Plugin;
+use UniqueHoverSliderPlus\PostTypes\SlidePostType;
 
 class UniqueHoverSliderPlus extends Plugin
 {
@@ -35,25 +38,25 @@ class UniqueHoverSliderPlus extends Plugin
      * The plugin name.
      * @var string
      */
-    protected $name = 'Unique Hover Slider Plus';
+    public $name = 'Unique Hover Slider Plus';
 
     /**
      * The plugin slug.
      * @var string
      */
-    protected $slug = 'unique-hover-slider-plus';
+    public $slug = 'unique-hover-slider-plus';
 
     /**
      * A shortened name for menu displays.
      * @var string
      */
-    protected $short_name = 'UHSP Slider';
+    public $short_name = 'UHSP Slider';
 
     /**
      * The theme version.
      * @var string
      */
-    protected $version = '0.1.0';
+    public $version = '0.1.0';
 
     /**
      * The options used by this plugin.
@@ -100,6 +103,7 @@ class UniqueHoverSliderPlus extends Plugin
         ['wp_enqueue_scripts', 'assets'],
         ['wp_head', 'meta_viewport'],
         ['uhsp_add_slider', 'on_add_slider'],
+        ['init', 'register_post_types'],
     ];
 
     /**
@@ -127,6 +131,15 @@ class UniqueHoverSliderPlus extends Plugin
     public function boot()
     {
         // ...
+    }
+
+    /**
+     * Register custom post types on init.
+     * @return void
+     */
+    public function register_post_types()
+    {
+        SlidePostType::register($this);
     }
 
     /**

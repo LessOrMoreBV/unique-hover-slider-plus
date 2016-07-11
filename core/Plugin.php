@@ -19,31 +19,31 @@ abstract class Plugin
      * The plugin name.
      * @var string
      */
-    protected $name = 'My Plugin';
+    public $name = 'My Plugin';
 
     /**
      * A shortened name for menu displays.
      * @var string
      */
-    protected $short_name = 'MP';
+    public $short_name = 'MP';
 
     /**
      * The plugin slug.
      * @var string
      */
-    protected $slug = 'my-plugin';
+    public $slug = 'my-plugin';
 
     /**
      * The theme version.
      * @var string
      */
-    protected $version = '0.0.0';
+    public $version = '0.0.0';
 
     /**
      * The user capability required to edit this plugin.
      * @var string
      */
-    protected $capability = 'manage_options';
+    public $capability = 'manage_options';
 
     /**
      * The d efault directories to be extended by the
