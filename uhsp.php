@@ -60,7 +60,7 @@ class UniqueHoverSliderPlus extends Plugin
      * @var array
      */
     protected $options = [
-        'sliders' => [],
+        // ...
     ];
 
     /**
@@ -70,8 +70,25 @@ class UniqueHoverSliderPlus extends Plugin
      * @var array
      */
     protected $menu_pages = [
-        ['menu_dashboard', 'images/icon.svg'],
-        // ['menu_dashboard', 'dashicons-images-alt2'],
+        [
+            'menu_slug' => 'uhsp-menu',
+            'method' => 'menu_dashboard',
+            'icon' => 'images/icon.svg',
+            'children' => [
+                [
+                    'page_title' => 'USHP Slides',
+                    'menu_title' => 'Slides',
+                    'menu_slug' => 'uhsp-slides',
+                    'method' => 'menu_slides'
+                ],
+                [
+                    'page_title' => 'USHP Sliders',
+                    'menu_title' => 'Sliders',
+                    'menu_slug' => 'uhsp-sliders',
+                    'method' => 'menu_sliders'
+                ],
+            ]
+        ],
     ];
 
     /**
@@ -91,6 +108,16 @@ class UniqueHoverSliderPlus extends Plugin
      */
     protected $shortcodes = [
         ['uhsp', 'render_slider'],
+    ];
+
+    /**
+     * Post types created by this plugin.
+     * @var array
+     */
+    protected $post_types = [
+        'uhsp_slide' => [
+            'labels' => [],
+        ]
     ];
 
     /**
@@ -127,6 +154,24 @@ class UniqueHoverSliderPlus extends Plugin
 
         // Echo the rendered template.
         echo $this->render_template('menu_dashboard.php');
+    }
+
+    /**
+     * Renders the slides page.
+     * @return void
+     */
+    public function menu_slides()
+    {
+        echo "<h2>UHSP Slides</h2>";
+    }
+
+    /**
+     * Renders the sliders page.
+     * @return string
+     */
+    public function menu_sliders()
+    {
+        echo "<h2>UHSP Sliders</h2>";
     }
 
     /**

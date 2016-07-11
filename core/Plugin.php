@@ -81,6 +81,12 @@ abstract class Plugin
     protected $uris = [];
 
     /**
+     * Top level menu pages to add.
+     * @var array
+     */
+    protected $menu_pages = [];
+
+    /**
      * A list of hooks and their method registration.
      * @var array
      */
@@ -438,25 +444,96 @@ abstract class Plugin
     }
 
     /**
+     * Generates a default menu array.
+     * @return array
+     */
+    public function generate_default_menu()
+    {
+        return [
+            'page_title' => $this->name,
+            'menu_title' => $this->short_name,
+            'capability' => $this->capability,
+            'menu_slug' => $this->slug,
+            'icon' => 'dashicons-admin-post',
+            'children' => []
+        ];
+    }
+
+    /**
+     * Generates a default submenu array.
+     * @return array
+     */
+    public function generate_default_submenu()
+    {
+        return [
+            'page_title' => $this->name,
+            'menu_title' => $this->short_name,
+            'capability' => $this->capability,
+            'menu_slug' => $this->slug,
+        ];
+    }
+
+    /**
      * Renders pre-defined menus. Automatically called on 'admin_menu' hook.
      * @hook   admin_menu
      * @return void
      */
     public function menus()
     {
-        // Try to add top level domains.
-        $this->menu_pages = array_map(function ($menu_page) {
+        // Remap the menu pages to load any default settings.
+        $renderable_menu_pages = array_map(function ($menu_page) {
+            // Let's first merge it with a default generated menu
+            // so that any missing properties will be filled in
+            // with default values.
+            $menu_page = array_merge(
+                $this->generate_default_menu(),
+                $menu_page
+            );
+
+            // Lets use this loop to map the submenu pages as well.
+            if (count($menu_page['children']) > 0) {
+                $menu_page['children'] = array_map(function ($submenu_page) use ($menu_page) {
+                    // Fill the submenu page with defaults.
+                    $submenu_page = array_merge(
+                        $this->generate_default_submenu(),
+                        $submenu_page
+                    );
+
+                    return [
+                        $menu_page['menu_slug'],
+                        __($submenu_page['page_title'], $this->slug),
+                        __($submenu_page['menu_title'], $this->slug),
+                        $submenu_page['capability'],
+                        $submenu_page['menu_slug'],
+                        [$this, $submenu_page['method']],
+                    ];
+                }, $menu_page['children']);
+            }
+
+            // Now we want to order the attributes as a non-indexed
+            // array to prepare it for a function call.
             return [
-                $this->name,
-                $this->short_name,
-                $this->capability,
-                $this->slug,
-                [$this, $menu_page[0]],
-                $this->asset($menu_page[1])
+                'menu_page' => [
+                    __($menu_page['page_title'], $this->slug),
+                    __($menu_page['menu_title'], $this->slug),
+                    $menu_page['capability'],
+                    $menu_page['menu_slug'],
+                    [$this, $menu_page['method']],
+                    $menu_page['icon'],
+                ],
+                'submenu_pages' => $menu_page['children'],
             ];
         }, $this->menu_pages);
-        foreach ($this->menu_pages as $menu_page) {
-            call_user_func_array('add_menu_page', $menu_page);
+
+        // Then we can loop through them to actually add them as
+        // menu pages.
+        foreach ($renderable_menu_pages as $menu_item) {
+            call_user_func_array('add_menu_page', $menu_item['menu_page']);
+
+            // We also have to go through any potential submenus.
+            foreach ($menu_item['submenu_pages'] as $submenu_item) {
+                call_user_func_array('add_submenu_page', $submenu_item);
+            }
         }
     }
 
