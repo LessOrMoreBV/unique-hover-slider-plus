@@ -46,7 +46,22 @@ gulp.task('scripts', function() {
     .pipe(rename('script.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./assets/js/'))
-    .pipe(notify({ title: 'Javascript', message: 'Compiled and minified' }));
+    .pipe(notify({ title: 'Javascript [app]', message: 'Compiled and minified' }));
+});
+
+// Compile vendor JS and minify.
+gulp.task('vendor', function() {
+    return gulp.src([
+        './source/js/vendor/ResizeSensor.js',
+        './source/js/vendor/ElementQueries.js'
+    ])
+    .pipe(plumber({errorHandler: errorAlert}))
+    .pipe(concat('vendor.js'))
+    .pipe(gulp.dest('./assets/js/'))
+    .pipe(rename('vendor.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./assets/js/'))
+    .pipe(notify({ title: 'Javascript [vendor]', message: 'Compiled and minified' }));
 });
 
 // Gulp watch, keep watching while programming.

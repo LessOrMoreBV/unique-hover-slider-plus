@@ -11,15 +11,15 @@
         <ul class="uhsp-title-list">
             <li class="uhsp-title">
                 <h2 class="uhsp-slide-title">Web-applicaties</h2>
-                <p class="uhsp-slide-subtitle">waar je feilloos je weg in vindt</p>
+                <div class="uhsp-slide-subtitle">waar je feilloos je weg in vindt</div>
             </li>
             <li class="uhsp-title">
                 <h2 class="uhsp-slide-title">Websites & webshops</h2>
-                <p class="uhsp-slide-subtitle">die je zelf kunt bijhouden</p>
+                <div class="uhsp-slide-subtitle">die je zelf kunt bijhouden</div>
             </li>
             <li class="uhsp-title ">
                 <h2 class="uhsp-slide-title">Internet of Things</h2>
-                <p class="uhsp-slide-subtitle">de meest innovatieve concepten</p>
+                <div class="uhsp-slide-subtitle">de meest innovatieve concepten</div>
             </li>
             <div class="uhsp-hover-bar">
                 <div class="uhsp-hover-bar-color"></div>

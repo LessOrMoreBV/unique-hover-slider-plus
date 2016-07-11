@@ -1,0 +1,62 @@
+.uhsp-slider-wrapper {
+    .uhsp-left,
+    .uhsp-right {
+        @include transition(padding .15s ease);
+        color: white;
+        cursor: pointer;
+        fill: none;
+        height: $uhsp-height-desktop;
+        line-height: $uhsp-height-desktop;
+        opacity: 1;
+        position: absolute;
+        stroke: white;
+        text-align: center;
+        width: 40px;
+        z-index: 2;
+
+        svg {
+            height: $uhsp-height-desktop;
+            width: 18px;
+        }
+    }
+
+    .uhsp-left {
+        left: 0;
+        padding-left: 10px;
+        &:hover {
+            padding-left: 6px;
+        }
+    }
+
+    .uhsp-right {
+        padding-right: 10px;
+        right: 0;
+        &:hover {
+            padding-right: 6px;
+        }
+    }
+
+    @include tablet {
+        .uhsp-left,
+        .uhsp-right {
+            height: $uhsp-height-tablet;
+            line-height: $uhsp-height-tablet;
+
+            svg {
+                height: $uhsp-height-tablet;
+            }
+        }
+    }
+    
+    @include mobile {
+        .uhsp-left,
+        .uhsp-right {
+            height: $uhsp-height-mobile;
+            line-height: $uhsp-height-mobile;
+
+            svg {
+                height: $uhsp-height-mobile;
+            }
+        }
+    }
+}

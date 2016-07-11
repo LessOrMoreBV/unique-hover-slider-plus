@@ -1,6 +1,6 @@
 (function($) {
-
     $(function() {
+        ElementQueries.listen();
         /**
          * Function to hide an element.
          * @return {void}
@@ -29,7 +29,7 @@
          * @return {Number}
          */
         var getVisibleSlideCount = function() {
-            var ww = $(window).width();
+            var sliderWidth = $('.uhsp-slider-wrapper').width();
             return 1;
         };
 
@@ -148,7 +148,7 @@
          * @return {void}
          */
         var changeTitleState = function() {
-            var ww = $(window).width(),
+            var sliderWidth = $('.uhsp-slider-wrapper').width(),
                 slideCount = Number(i) + 1,
                 barPosition = Number(i) * (100 / availableSlides) + "%",
                 slideMobile = Number(i) * -100 + '%';
@@ -163,7 +163,7 @@
             $(".uhsp-hover-bar").css("left", barPosition);
 
             // On a small screen, animate the titles in and out of the screen.
-            if (ww <= 667) {
+            if (sliderWidth <= 667) {
                 $('.uhsp-title-list').animate({left: slideMobile}, 600, "swing");
             }
         };
