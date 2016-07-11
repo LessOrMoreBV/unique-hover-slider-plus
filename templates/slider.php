@@ -28,18 +28,18 @@
     </section>
 
     <section class="uhsp-slider-images">
-        <article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/web-applicaties.jpg')">
-            <img class="uhsp-single-image" src="<?= PLUGIN_URI ?>assets/images/web-applicaties.svg" alt="web-applicaties">
+        <article class="uhsp-single-slide" style="background-image: url('<?= $this->asset('images/web-applicaties.jpg') ?>')">
+            <img class="uhsp-single-image" src="<?= $this->asset('images/web-applicaties.svg') ?>" alt="web-applicaties">
             <div class="ushp-slide-overlay"></div>
         </article>
 
-        <article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/websites.jpg')">
-            <img class="uhsp-single-image" src="<?= PLUGIN_URI ?>assets/images/websites.svg" alt="websites">
+        <article class="uhsp-single-slide" style="background-image: url('<?= $this->asset('images/websites.jpg') ?>')">
+            <img class="uhsp-single-image" src="<?= $this->asset('images/websites.svg') ?>" alt="websites">
             <div class="ushp-slide-overlay"></div>
         </article>
 
-        <article class="uhsp-single-slide" style="background-image: url('<?= PLUGIN_URI ?>assets/images/internet-of-things.jpg')">
-            <img class="uhsp-single-image" src="<?= PLUGIN_URI ?>assets/images/internet-of-things.svg" alt="internet-of-things">
+        <article class="uhsp-single-slide" style="background-image: url('<?= $this->asset('images/internet-of-things.jpg') ?>')">
+            <img class="uhsp-single-image" src="<?= $this->asset('images/internet-of-things.svg') ?>" alt="internet-of-things">
            <div class="ushp-slide-overlay"></div>
         </article>
     </section>

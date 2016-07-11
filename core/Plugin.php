@@ -87,13 +87,22 @@ abstract class Plugin
     protected $hooks = [];
 
     /**
-     * Merges the URI and directory listings.
+     * Shortcodes to be registered.
+     * @var string
+     */
+    protected $shortcodes = [];
+
+    /**
+     * Merges the URI and directory listings. Register all options,
+     * actions and shortcodes. When finished call the boot method to
+     * allow the user to take over post-initialization.
      */
     public function __construct()
     {
         $this->init_properties();
         $this->register_options();
         $this->register_actions();
+        $this->register_shortcodes();
 
         // Call a boot method to indicate that we're ready.
         $this->boot();
@@ -134,6 +143,17 @@ abstract class Plugin
         // Attach all hooks registered on the property as well.
         foreach ($this->hooks as $hook) {
             call_user_func_array([$this, 'add_action'], $hook);
+        }
+    }
+
+    /**
+     * Registers all shortcodes.
+     * @return void
+     */
+    public function register_shortcodes()
+    {
+        foreach ($this->shortcodes as $shortcode) {
+            call_user_func_array([$this, 'add_shortcode'], $shortcode);
         }
     }
 
@@ -215,11 +235,9 @@ abstract class Plugin
         // Resolve to full file path.
         $file = $this->template($file);
 
-        // #TODO: Make better, screw ob.
         ob_start();
-        define('PLUGIN_URI', $this->get_uri('plugin'));
         include $file;
-        $template = ob_get_contents(); // get contents of buffer
+        $template = ob_get_contents();
         ob_end_clean();
 
         return $template;
@@ -391,15 +409,6 @@ abstract class Plugin
         foreach ($this->menu_pages as $menu_page) {
             call_user_func_array('add_menu_page', $menu_page);
         }
-    }
-
-    /**
-     * For the user to overwrite.
-     * @return void
-     */
-    public function assets()
-    {
-        // ...
     }
 
     /**

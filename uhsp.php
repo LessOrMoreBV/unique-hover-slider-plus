@@ -81,7 +81,28 @@ class UniqueHoverSliderPlus extends Plugin
      */
     protected $hooks = [
         ['wp_enqueue_scripts', 'assets'],
+        ['wp_head', 'meta_viewport'],
     ];
+
+    /**
+     * Shortcodes to be registered.
+     * @var string
+     */
+    protected $shortcodes = [
+        ['uhsp', 'render'],
+    ];
+
+    /**
+     * Automatically called when the class is done booting.
+     * @return void
+     */
+    public function boot()
+    {
+        // Update things if there is any input.
+        if ($this->has_input('event')) {
+            $this->handle_input();
+        }
+    }
 
     /**
      * Loads assets. Automatically called after 'wp_enqueue_scripts' hook.
@@ -111,24 +132,12 @@ class UniqueHoverSliderPlus extends Plugin
     }
 
     /**
-     * Automatically called when the class is done booting.
-     * @return void
+     * Renders an extra meta tag to manage the viewport on mobile.
+     * @return string
      */
-    public function boot()
-    {
-        // Update things if there is any input.
-        if ($this->has_input('event')) {
-            $this->handle_input();
-        }
-
-        // Register the shortcode to render the slider.
-        $this->add_shortcode('uhsp', 'render');
-        $this->add_action('wp_head', 'meta_viewport');
-    }
-
     public function meta_viewport()
     {
-        echo '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
+        echo $this->render_template('meta_viewport.php');
     }
 
     /**
