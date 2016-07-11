@@ -82,6 +82,7 @@ class UniqueHoverSliderPlus extends Plugin
     protected $hooks = [
         ['wp_enqueue_scripts', 'assets'],
         ['wp_head', 'meta_viewport'],
+        ['uhsp_add_slider', 'on_add_slider'],
     ];
 
     /**
@@ -89,7 +90,7 @@ class UniqueHoverSliderPlus extends Plugin
      * @var string
      */
     protected $shortcodes = [
-        ['uhsp', 'render'],
+        ['uhsp', 'render_slider'],
     ];
 
     /**
@@ -98,10 +99,7 @@ class UniqueHoverSliderPlus extends Plugin
      */
     public function boot()
     {
-        // Update things if there is any input.
-        if ($this->has_input('event')) {
-            $this->handle_input();
-        }
+        // ...
     }
 
     /**
@@ -144,34 +142,21 @@ class UniqueHoverSliderPlus extends Plugin
      * Renders the slider as HTML.
      * @return string
      */
-    public function render()
+    public function render_slider()
     {
         return $this->render_template('slider.php');
     }
 
     /**
-     * Handles post data to update our plugin.
+     * When a new slider is submitted via a form.
      * @return void
      */
-    public function handle_input()
+    public function on_add_slider()
     {
         // Kills the page if the user doesn't have enough permissions.
         $this->check_user_permission('modify');
 
-        // An event is required to see what action we should take.
-        if ($this->has_input('event')) {
-            switch ($this->get_input('event')) {
-                case 'add_slider':
-                    die('Yolo');
-                    break;
-                case 'update_slider':
-                    // #TODO: Update slider.
-                    break;
-                case 'remove_slider':
-                    // #TODO: Remove a slider.
-                    break;
-            }
-        }
+        die('YOLO');
     }
 }
 

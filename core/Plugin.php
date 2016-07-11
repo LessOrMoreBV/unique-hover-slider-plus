@@ -139,6 +139,7 @@ abstract class Plugin
     {
         // Define static actions that should always happen.
         $this->add_action('admin_menu', 'menus');
+        $this->add_action('init', 'handle_input');
 
         // Attach all hooks registered on the property as well.
         foreach ($this->hooks as $hook) {
@@ -336,6 +337,54 @@ abstract class Plugin
     public function get_input($key)
     {
         return $_POST[$key];
+    }
+
+    /**
+     * For the user to overwrite.
+     * @return void
+     */
+    public function handle_input()
+    {
+        // If there was any kind of input under the 'event'
+        // key, we'll try to handle it.
+        if ($this->has_input('event')) {
+            $this->handle_event($this->get_input('event'));
+        }
+    }
+
+    /**
+     * If the given action has a registered hook.
+     * @param  string  $action
+     * @return boolean
+     */
+    public function has_action_hook($action)
+    {
+        $hook_exists = false;
+
+        // Check all actions to see if it contains the one we want.
+        foreach ($this->hooks as $hook) {
+            // The actual action name is the first index of the array.
+            if ($hook[0] === $action) {
+                $hook_exists = true;
+            }
+        }
+
+        return $hook_exists;
+    }
+
+    /**
+     * Calls the custom hook registered to the given event.
+     * @param  string $event
+     * @return void
+     */
+    public function handle_event($event)
+    {
+        // Make sure we actually have a hook for the
+        // given event.
+        if ($this->has_action_hook($event)) {
+            // Call the event as an action.
+            do_action($event);
+        }
     }
 
     /**

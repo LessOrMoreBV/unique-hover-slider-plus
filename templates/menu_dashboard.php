@@ -1,17 +1,23 @@
 <div class="wrap">
-    <h2><?= $this->name ?></h2>
-    <h3><?= _e("Add new slider", $this->slug) ?></h3>
+    <h1><?= $this->name ?></h1>
     <form name="uhsp_add_slider" method="post" action="">
-
-        <!-- Event input determines how the form is handled in the back-end. -->
-        <input type="hidden" name="event" value="add_slider">
-
-        <p><?= _e('Slider title', $this->slug) ?></p>
-        <input type="text" name="uhsp-slider-title" placeholder="The title">
-        <p><?= _e('Slider slug', $this->slug) ?></p>
-        <input type="text" name="uhsp-slider-slug" placeholder="The slug">
+        <!-- Event will be called as action in the back-end. -->
+        <input type="hidden" name="event" value="uhsp_add_slider">
+        <h2><?= _e("General settings", $this->slug) ?></h2>
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th scope="row"><?= _e('Some setting', $this->slug) ?></th>
+                    <td><input class="regular-text" type="text" name="uhsp-slider-some-setting" placeholder="Some setting..."></td>
+                </tr>
+                <tr>
+                    <th scope="row"><?= _e('Some other setting', $this->slug) ?></th>
+                    <td><input class="regular-text" type="text" name="uhsp-slider-some-other-setting" placeholder="Some other setting..."></td>
+                </tr>
+            </tbody>
+        </table>
         <p class="submit">
-            <input type="submit" name="submit" class="button-primary" value="<?= _e('Add slider', $this->slug) ?>">
+            <input type="submit" name="submit" class="button-primary" value="<?= _e('Update settings', $this->slug) ?>">
         </p>
     </form>
 </div>
