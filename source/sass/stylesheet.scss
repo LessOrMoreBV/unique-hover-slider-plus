@@ -1,10 +1,15 @@
 @import "compass/css3/box-sizing";
 @import "compass/css3/transition";
 
-@mixin mobile {  @media only screen and (max-width: 667px) { @content; } }
-@mixin mini {    @media only screen and (max-width: 800px) { @content; } }
-@mixin tablet {  @media only screen and (max-width: 1024px) { @content; } }
-@mixin desktop { @media only screen and (max-width: $uhsp-maxWidth) { @content; } }
+// @mixin mobile {  @media only screen and (max-width: 667px) { @content; } }
+// @mixin mini {    @media only screen and (max-width: 800px) { @content; } }
+// @mixin tablet {  @media only screen and (max-width: 1024px) { @content; } }
+// @mixin desktop { @media only screen and (max-width: $uhsp-maxWidth) { @content; } }
+
+@mixin mobile {  &[max-width~="667px"] { @content; }  }
+@mixin mini {    &[max-width~="800px"] { @content; }  }
+@mixin tablet {  &[max-width~="1024px"] { @content; }  }
+@mixin desktop { &[max-width~="1480px"] { @content; }  }
 
 $uhsp-blue:              #334D5C;
 $uhsp-yellow:            #F5C949;
@@ -22,14 +27,6 @@ $uhsp-maxWidth:          1480px;
     & > * {
         @include box-sizing(border-box);
     }
-    
-    @include tablet {
-        height: 600px;
-    }
-    
-    @include mobile {
-        height: 400px;
-    }
 
     a {
         text-decoration: none;
@@ -41,9 +38,6 @@ $uhsp-maxWidth:          1480px;
             
             .uhsp-slider-titles {
                 left: calc((100% - #{$uhsp-maxWidth}) / 2);
-                @include desktop {
-                    left: 0;
-                }
                 
                 .uhsp-hover-bar {
                     @if $i == 1 { left: 0; }                        
@@ -61,15 +55,6 @@ $uhsp-maxWidth:          1480px;
                 }
 
                 ul.uhsp-title-list {
-                    @include mobile {
-                        @if $i == 1 { left: 0; }                        
-                        @if $i == 2 { left: -100%; }                         
-                        @if $i == 3 { left: -100%; }
-                        @if $i == 4 { left: -200%; }
-                        @if $i == 5 { left: -200%; }
-                        width: 100% * $i;
-                    }
-
                     li.uhsp-title {
                         width: 100% / $i;
                     }
@@ -109,24 +94,6 @@ $uhsp-maxWidth:          1480px;
             height: 700px;
             width: 18px;
         }
-
-        @include tablet {
-            height: 600px;
-            line-height: 600px;
-
-            svg {
-                height: 600px;
-            }
-        }
-
-        @include mobile {
-            height: 400px;
-            line-height: 400px;
-
-            svg {
-                height: 400px;
-            }
-        }
     }
 
     .uhsp-left,
@@ -159,14 +126,6 @@ $uhsp-maxWidth:          1480px;
         position: absolute;
         width: $uhsp-maxWidth;
         z-index: 2;
-        @include desktop {
-            left: 0;
-            width: 100%;
-        }
-        @include mobile {
-            bottom: 20px;
-            padding: 0;
-        }
 
         .uhsp-hover-bar {
             @include transition(left .3s ease);
@@ -179,10 +138,6 @@ $uhsp-maxWidth:          1480px;
                 height: 2px;
                 width: 100%;
             }
-
-            @include mobile {
-                display: none;
-            }
         }
 
         ul.uhsp-title-list {
@@ -191,9 +146,6 @@ $uhsp-maxWidth:          1480px;
             margin: 0;
             padding: 0;
             position: relative;
-            @include mobile {
-                border-top: none;
-            }
 
             li.uhsp-title {
                 cursor: pointer;
@@ -209,21 +161,16 @@ $uhsp-maxWidth:          1480px;
                     font-weight: 400;
                     margin: 5px 0 0;
                     opacity: 0.3;
-                    @include tablet {
-                        font-size: 25px;
-                    }
-                    @include mobile {
-                        font-size: 18px;
-                    }
                 }
 
-                p.uhsp-slide-subtitle {
+                .uhsp-slide-subtitle {
                     @include transition(opacity .3s ease);
                     color: white;
                     font-size: 12px;
                     font-weight: 400;
                     margin: 0;
                     opacity: 0.3;
+                    width: 100%;
                 }
 
                 &.selected {
@@ -231,7 +178,7 @@ $uhsp-maxWidth:          1480px;
                         opacity: 1;
                         padding: 0;
                     }
-                    p.uhsp-slide-subtitle {
+                    .uhsp-slide-subtitle {
                         opacity: 1;
                     }
                 }
@@ -266,17 +213,6 @@ $uhsp-maxWidth:          1480px;
                 position: absolute;
                 width: 440px;
                 z-index: 1;
-                @include tablet {
-                    height: 220px;
-                    left: calc(50% - 162px);
-                    width: 324px;
-                }
-                @include mobile {
-                    bottom: 130px;
-                    height: 105px;
-                    left: calc(50% - 75px);
-                    width: 150px;
-                }
             }
 
             .ushp-slide-overlay {
@@ -287,6 +223,116 @@ $uhsp-maxWidth:          1480px;
                 top: 0;
                 width: 100%;
                 z-index: 0;
+            }
+        }
+    }
+
+    @include desktop {
+        @for $i from 1 through 5 {
+            &.uhsp-amount-#{$i} {
+                .uhsp-slider-titles {
+                    left: 0;
+                }
+            }
+
+            .uhsp-slider-titles {
+                left: 0;
+                width: 100%;
+            }
+        }
+    }
+
+    @include tablet {
+        height: 600px;
+
+        .uhsp-left,
+        .uhsp-right {
+            height: 600px;
+            line-height: 600px;
+
+            svg {
+                height: 600px;
+            }
+        }
+
+        .uhsp-slider-titles {
+            ul.uhsp-title-list {
+                li.uhsp-title {
+                    h2.uhsp-slide-title {
+                        font-size: 25px;
+                    }
+                }
+            }
+        }
+
+
+
+        .uhsp-slider-images {
+            .uhsp-single-slide {
+                img.uhsp-single-image {
+                    height: 220px;
+                    left: calc(50% - 162px);
+                    width: 324px;
+                }
+            }
+        }
+    }
+    
+    @include mobile {
+        height: 400px;
+
+        @for $i from 1 through 5 {
+            &.uhsp-amount-#{$i} {
+                .uhsp-slider-titles {
+                    ul.uhsp-title-list {
+                        @if $i == 1 { left: 0; }
+                        @if $i == 2 { left: -100%; }
+                        @if $i == 3 { left: -100%; }
+                        @if $i == 4 { left: -200%; }
+                        @if $i == 5 { left: -200%; }
+                        width: 100% * $i;
+                    }
+                }
+            }
+        }
+
+        .uhsp-left,
+        .uhsp-right {
+            height: 400px;
+            line-height: 400px;
+
+            svg {
+                height: 400px;
+            }
+        }
+
+        .uhsp-slider-titles {
+            bottom: 20px;
+            padding: 0;
+
+            .uhsp-hover-bar {
+                display: none;
+            }
+
+            ul.uhsp-title-list {
+                border-top: none;
+
+                li.uhsp-title {
+                    h2.uhsp-slide-title {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+
+        .uhsp-slider-images {
+            .uhsp-single-slide {
+                img.uhsp-single-image {
+                    bottom: 130px;
+                    height: 105px;
+                    left: calc(50% - 75px);
+                    width: 150px;
+                }
             }
         }
     }

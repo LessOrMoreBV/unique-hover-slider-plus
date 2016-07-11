@@ -73,6 +73,7 @@ class UniqueHoverSliderPlus extends Plugin
      */
     public function assets()
     {
+        $this->enqueue_script('vendor', 'js/vendor.js');
         $this->enqueue_script('script', 'js/script.js', ['jquery']);
         $this->enqueue_style('style', 'css/stylesheet.min.css');
     }
