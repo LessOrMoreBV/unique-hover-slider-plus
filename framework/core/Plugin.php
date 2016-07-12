@@ -519,7 +519,7 @@ abstract class Plugin
                     $menu_page['capability'],
                     $menu_page['menu_slug'],
                     [$this, $menu_page['method']],
-                    $menu_page['icon'],
+                    $this->asset($menu_page['icon']),
                 ],
                 'submenu_pages' => $menu_page['children'],
             ];

@@ -20,11 +20,13 @@ License URI: licence/GPL.txt
 */
 
 
-require_once('core/Plugin.php');
-require_once('post-types/SlidePostType.php');
+require_once('framework/core/Plugin.php');
+require_once('framework/post-types/SlidePostType.php');
+require_once('framework/taxonomies/SlidePageTaxonomy.php');
 
 use UniqueHoverSliderPlus\Core\Plugin;
 use UniqueHoverSliderPlus\PostTypes\SlidePostType;
+use UniqueHoverSliderPlus\Taxonomies\SlidePageTaxonomy;
 
 class UniqueHoverSliderPlus extends Plugin
 {
@@ -71,7 +73,7 @@ class UniqueHoverSliderPlus extends Plugin
      * sure that the one you do add is really required to be a top level
      * menu item.
      * @var array
-     */
+     *
     protected $menu_pages = [
         [
             'menu_slug' => 'uhsp-menu',
@@ -92,7 +94,7 @@ class UniqueHoverSliderPlus extends Plugin
                 ],
             ]
         ],
-    ];
+    ];/**/
 
     /**
      * Hooks automatically registered during the boot
@@ -103,7 +105,7 @@ class UniqueHoverSliderPlus extends Plugin
         ['wp_enqueue_scripts', 'assets'],
         ['wp_head', 'meta_viewport'],
         ['uhsp_add_slider', 'on_add_slider'],
-        ['init', 'register_post_types'],
+        ['init', 'register'],
     ];
 
     /**
@@ -112,16 +114,6 @@ class UniqueHoverSliderPlus extends Plugin
      */
     protected $shortcodes = [
         ['uhsp', 'render_slider'],
-    ];
-
-    /**
-     * Post types created by this plugin.
-     * @var array
-     */
-    protected $post_types = [
-        'uhsp_slide' => [
-            'labels' => [],
-        ]
     ];
 
     /**
@@ -137,9 +129,10 @@ class UniqueHoverSliderPlus extends Plugin
      * Register custom post types on init.
      * @return void
      */
-    public function register_post_types()
+    public function register()
     {
         SlidePostType::register($this);
+        SlidePageTaxonomy::register($this);
     }
 
     /**
