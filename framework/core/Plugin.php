@@ -7,6 +7,8 @@ if (! defined('ABSPATH')) {
     exit('No direct script access allowed');
 }
 
+require_once('Registerable.php');
+
 abstract class Plugin
 {
     /**
@@ -165,6 +167,28 @@ abstract class Plugin
     }
 
     /**
+     * Registers the given post type.
+     * @param  Registerable $post_type
+     * @return void
+     */
+    public function register_post_type(Registerable $post_type)
+    {
+        $post_type->set_parent($this);
+        $post_type->register();
+    }
+
+    /**
+     * Registers the given taxonomy.
+     * @param  Registerable $taxonomy
+     * @return void
+     */
+    public function register_taxonomy(Registerable $taxonomy)
+    {
+        $taxonomy->set_parent($this);
+        $taxonomy->register();
+    }
+
+    /**
      * Checks if the user can edit this plugin.
      * @return boolean
      */
@@ -237,8 +261,10 @@ abstract class Plugin
      * @param  string $file
      * @return string
      */
-    public function render_template($file)
+    public function render_template($file, $attributes = [])
     {
+        extract($attributes);
+
         // Resolve to full file path.
         $file = $this->template($file);
 

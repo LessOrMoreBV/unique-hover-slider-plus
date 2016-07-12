@@ -105,7 +105,7 @@ class UniqueHoverSliderPlus extends Plugin
         ['wp_enqueue_scripts', 'assets'],
         ['wp_head', 'meta_viewport'],
         ['uhsp_add_slider', 'on_add_slider'],
-        ['init', 'register'],
+        ['init', 'on_init'],
     ];
 
     /**
@@ -129,10 +129,12 @@ class UniqueHoverSliderPlus extends Plugin
      * Register custom post types on init.
      * @return void
      */
-    public function register()
+    public function on_init()
     {
-        SlidePostType::register($this);
-        SlidePageTaxonomy::register($this);
+        add_image_size('uhsp-foreground-icon-retina', 740, 500, true);
+        add_image_size('uhsp-foreground-icon', 370, 250, true);
+        $this->register_post_type(new SlidePostType);
+        $this->register_taxonomy(new SlidePageTaxonomy);
     }
 
     /**
@@ -154,32 +156,32 @@ class UniqueHoverSliderPlus extends Plugin
      * @hook   admin_menu
      * @return void
      */
-    public function menu_dashboard()
-    {
-        // Kills the page if the user doesn't have enough permissions.
-        $this->check_user_permission('modify');
+    // public function menu_dashboard()
+    // {
+    //     // Kills the page if the user doesn't have enough permissions.
+    //     $this->check_user_permission('modify');
 
-        // Echo the rendered template.
-        echo $this->render_template('menu_dashboard.php');
-    }
+    //     // Echo the rendered template.
+    //     echo $this->render_template('menu_dashboard.php');
+    // }
 
     /**
      * Renders the slides page.
      * @return void
      */
-    public function menu_slides()
-    {
-        echo "<h2>UHSP Slides</h2>";
-    }
+    // public function menu_slides()
+    // {
+    //     echo "<h2>UHSP Slides</h2>";
+    // }
 
     /**
      * Renders the sliders page.
      * @return string
      */
-    public function menu_sliders()
-    {
-        echo "<h2>UHSP Sliders</h2>";
-    }
+    // public function menu_sliders()
+    // {
+    //     echo "<h2>UHSP Sliders</h2>";
+    // }
 
     /**
      * Renders an extra meta tag to manage the viewport on mobile.
@@ -194,9 +196,28 @@ class UniqueHoverSliderPlus extends Plugin
      * Renders the slider as HTML.
      * @return string
      */
-    public function render_slider()
+    public function render_slider($attributes, $content)
     {
-        return $this->render_template('slider.php');
+        extract($attributes);
+
+        $args = [
+            'post_type' => 'slide',
+            'tax_query' => [
+                [
+                    'taxonomy' => SlidePageTaxonomy::TAXONOMY,
+                    'field' => 'slug',
+                    'terms' => $id,
+                ]
+            ]
+        ];
+        $slides = new WP_Query($args);
+        // echo "<pre>";
+        // print_r($slides->get_posts());
+        // echo "</pre>";
+        // die();
+
+
+        return $this->render_template('slider.php', ['slides' => $slides]);
     }
 
     /**
@@ -208,7 +229,7 @@ class UniqueHoverSliderPlus extends Plugin
         // Kills the page if the user doesn't have enough permissions.
         $this->check_user_permission('modify');
 
-        die('YOLO');
+        // ... Do stuff.
     }
 }
 
