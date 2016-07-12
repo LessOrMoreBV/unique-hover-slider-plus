@@ -19,9 +19,14 @@ License: GNU General Public License
 License URI: licence/GPL.txt
 */
 
-// Include base plugin class.
-require_once('core/Plugin.php');
+
+require_once('framework/core/Plugin.php');
+require_once('framework/post-types/SlidePostType.php');
+require_once('framework/taxonomies/SlidePageTaxonomy.php');
+
 use UniqueHoverSliderPlus\Core\Plugin;
+use UniqueHoverSliderPlus\PostTypes\SlidePostType;
+use UniqueHoverSliderPlus\Taxonomies\SlidePageTaxonomy;
 
 class UniqueHoverSliderPlus extends Plugin
 {
@@ -35,36 +40,111 @@ class UniqueHoverSliderPlus extends Plugin
      * The plugin name.
      * @var string
      */
-    protected $name = 'Unique Hover Slider Plus';
+    public $name = 'Unique Hover Slider Plus';
 
     /**
      * The plugin slug.
      * @var string
      */
-    protected $slug = 'unique-hover-slider-plus';
+    public $slug = 'unique-hover-slider-plus';
 
     /**
      * A shortened name for menu displays.
      * @var string
      */
-    protected $short_name = 'UHSP Slider';
+    public $short_name = 'UHSP Slider';
 
     /**
      * The theme version.
      * @var string
      */
-    protected $version = '0.1.0';
+    public $version = '0.1.0';
+
+    /**
+     * The options used by this plugin.
+     * @var array
+     */
+    protected $options = [
+        // ...
+    ];
 
     /**
      * Top level menu pages. Please don't add more than one.. and make
      * sure that the one you do add is really required to be a top level
      * menu item.
      * @var array
-     */
+     *
     protected $menu_pages = [
-        ['menu_dashboard', 'images/icon.svg']
-        // ['menu_dashboard', 'dashicons-images-alt2'] 
+        [
+            'menu_slug' => 'uhsp-menu',
+            'method' => 'menu_dashboard',
+            'icon' => 'images/icon.svg',
+            'children' => [
+                [
+                    'page_title' => 'USHP Slides',
+                    'menu_title' => 'Slides',
+                    'menu_slug' => 'uhsp-slides',
+                    'method' => 'menu_slides'
+                ],
+                [
+                    'page_title' => 'USHP Sliders',
+                    'menu_title' => 'Sliders',
+                    'menu_slug' => 'uhsp-sliders',
+                    'method' => 'menu_sliders'
+                ],
+            ]
+        ],
+    ];/**/
+
+    /**
+     * Hooks automatically registered during the boot
+     * sequence of the class.
+     * @var array
+     */
+    protected $hooks = [
+        ['wp_enqueue_scripts', 'assets'],
+        ['wp_head', 'meta_viewport'],
+        ['uhsp_add_slider', 'on_add_slider'],
+        ['init', 'on_init'],
     ];
+
+    /**
+     * Filters automatically registered during the boot
+     * sequence of the class.
+     * @var array
+     */
+    protected $filters = [
+        ['upload_mimes', 'cc_mime_types'],
+    ];
+
+    /**
+     * Shortcodes to be registered.
+     * @var string
+     */
+    protected $shortcodes = [
+        ['uhsp', 'render_slider'],
+    ];
+
+    /**
+     * Automatically called when the class is done booting.
+     * @return void
+     */
+    public function boot()
+    {
+        // ...
+    }
+
+    /**
+     * Register custom post types on init.
+     * @return void
+     */
+    public function on_init()
+    {
+        add_image_size('uhsp-foreground-icon-retina', 740, 500, true);
+        add_image_size('uhsp-foreground-icon', 370, 250, true);
+        $this->register_post_type(new SlidePostType);
+        $this->register_taxonomy(new SlidePageTaxonomy);
+    }
 
     /**
      * Loads assets. Automatically called after 'wp_enqueue_scripts' hook.
@@ -85,35 +165,88 @@ class UniqueHoverSliderPlus extends Plugin
      * @hook   admin_menu
      * @return void
      */
-    public function menu_dashboard()
+    // public function menu_dashboard()
+    // {
+    //     // Kills the page if the user doesn't have enough permissions.
+    //     $this->check_user_permission('modify');
+
+    //     // Echo the rendered template.
+    //     echo $this->render_template('menu_dashboard.php');
+    // }
+
+    /**
+     * Renders the slides page.
+     * @return void
+     */
+    // public function menu_slides()
+    // {
+    //     echo "<h2>UHSP Slides</h2>";
+    // }
+
+    /**
+     * Renders the sliders page.
+     * @return string
+     */
+    // public function menu_sliders()
+    // {
+    //     echo "<h2>UHSP Sliders</h2>";
+    // }
+
+    /**
+     * Renders an extra meta tag to manage the viewport on mobile.
+     * @return string
+     */
+    public function meta_viewport()
     {
-        // Kills the page if the user doesn't have enough permissions.
-        $this->check_user_permission('modify');
-        echo $this->render_template('menu_dashboard.php');
+        echo $this->render_template('meta_viewport.php');
     }
 
     /**
-     * Automatically called when the class is done booting.
-     * @return void
+     * Extends the default mime type array with the svg mime type.
+     * @param  array  $mimes
+     * @return string
      */
-    public function boot()
+    public function cc_mime_types($mimes)
     {
-        $this->add_shortcode('uhsp', 'render');
-        $this->add_action('wp_head', 'meta_viewport');
-    }
-
-    public function meta_viewport()
-    {
-        echo '<meta name="viewport" content="width=device-width, initial-scale=1.0" />'; 
+        $mimes['svg'] = 'image/svg+xml';
+        return $mimes;
     }
 
     /**
      * Renders the slider as HTML.
      * @return string
      */
-    public function render()
+    public function render_slider($attributes, $content)
     {
-        return $this->render_template('slider.php');
+        extract($attributes);
+
+        $args = [
+            'posts_per_page' => 5,
+            'no_found_rows' => true,
+            'post_type' => 'slide',
+            'tax_query' => [
+                [
+                    'taxonomy' => SlidePageTaxonomy::TAXONOMY,
+                    'field' => 'slug',
+                    'terms' => $id,
+                ]
+            ]
+        ];
+        $slides = new WP_Query($args);
+
+        return $this->render_template('slider.php', ['slides' => $slides]);
+    }
+
+    /**
+     * When a new slider is submitted via a form.
+     * @return void
+     */
+    public function on_add_slider()
+    {
+        // Kills the page if the user doesn't have enough permissions.
+        $this->check_user_permission('modify');
+
+        // ... Do stuff.
     }
 }
 
