@@ -1,14 +1,16 @@
 // Including plugins
 var gulp = require('gulp'),
-    minifyCss = require("gulp-minify-css"),
-    sass = require("gulp-sass"),
-    compass = require("gulp-compass"),
-    rename = require('gulp-rename'),
-    watch = require("gulp-watch"),
-    concat = require("gulp-concat"),
-    uglify = require("gulp-uglify"),
     notify = require("gulp-notify"),
-    plumber = require("gulp-plumber");
+    compass = require("gulp-compass"),
+    concat = require("gulp-concat"),
+    minifyCss = require("gulp-minify-css"),
+    plumber = require("gulp-plumber"),
+    rename = require('gulp-rename'),
+    retinize = require("gulp-retinize"),
+    sass = require("gulp-sass"),
+    sourcemaps = require("gulp-sourcemaps"),
+    uglify = require("gulp-uglify"),
+    watch = require("gulp-watch");
 
 function errorAlert(error){
 	notify.onError({
@@ -35,39 +37,51 @@ gulp.task('compass', function() {
     .pipe(notify({ title: 'SCSS', message: 'Compiled and minified' }));
 });
 
-// Compile JS and minify.
+// Compile JS and map and minify.
 gulp.task('scripts', function() {
     return gulp.src([
         './source/js/app.js'
     ])
     .pipe(plumber({errorHandler: errorAlert}))
+    .pipe(sourcemaps.init())
     .pipe(concat('script.js'))
     .pipe(gulp.dest('./assets/js/'))
     .pipe(rename('script.min.js'))
     .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./assets/js/'))
-    .pipe(notify({ title: 'Javascript [app]', message: 'Compiled and minified' }));
+    .pipe(notify({ title: 'Javascript', message: 'Compiled and minified' }));
 });
 
-// Compile vendor JS and minify.
+// Compile vendor JS and map and minify.
 gulp.task('vendor', function() {
     return gulp.src([
         './source/js/vendor/ResizeSensor.js',
         './source/js/vendor/ElementQueries.js'
     ])
     .pipe(plumber({errorHandler: errorAlert}))
+    .pipe(sourcemaps.init())
     .pipe(concat('vendor.js'))
     .pipe(gulp.dest('./assets/js/'))
     .pipe(rename('vendor.min.js'))
     .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./assets/js/'))
-    .pipe(notify({ title: 'Javascript [vendor]', message: 'Compiled and minified' }));
+    .pipe(notify({ title: 'Javascript', message: 'Compiled and minified' }));
+});
+
+// Compile images to retina friendly.
+gulp.task('images', function() {
+    gulp.src('./source/images/**/*.{png,jpg,jpeg}')
+        .pipe(retinize())
+        .pipe(gulp.dest('./assets/images/'));
 });
 
 // Gulp watch, keep watching while programming.
 gulp.task('watch', function() {
     gulp.watch('source/sass/**/*.scss', ['compass']);
     gulp.watch('source/js/**/*.js', ['scripts']);
+    gulp.watch('source/images/**/*.{png,jpg,jpeg}', ['images']);
 });
 
 gulp.task('default', function() {});
