@@ -95,6 +95,12 @@ abstract class Plugin
     protected $hooks = [];
 
     /**
+     * A list of filters and their method registration.
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
      * Shortcodes to be registered.
      * @var string
      */
@@ -152,6 +158,10 @@ abstract class Plugin
         // Attach all hooks registered on the property as well.
         foreach ($this->hooks as $hook) {
             call_user_func_array([$this, 'add_action'], $hook);
+        }
+
+        foreach ($this->filters as $filter) {
+            call_user_func_array([$this, 'add_filter'], $filter);
         }
     }
 
@@ -323,6 +333,17 @@ abstract class Plugin
     protected function add_action($event, $method)
     {
         add_action($event, [&$this, $method]);
+    }
+
+    /**
+     * Wraps the WP add_filter function by always calling it with
+     * an array as Callable.
+     * @param string $event
+     * @param string $method
+     */
+    protected function add_filter($event, $method)
+    {
+        add_filter($event, [&$this, $method]);
     }
 
     /**

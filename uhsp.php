@@ -109,6 +109,15 @@ class UniqueHoverSliderPlus extends Plugin
     ];
 
     /**
+     * Filters automatically registered during the boot
+     * sequence of the class.
+     * @var array
+     */
+    protected $filters = [
+        ['upload_mimes', 'cc_mime_types'],
+    ];
+
+    /**
      * Shortcodes to be registered.
      * @var string
      */
@@ -193,6 +202,17 @@ class UniqueHoverSliderPlus extends Plugin
     }
 
     /**
+     * Extends the default mime type array with the svg mime type.
+     * @param  array  $mimes
+     * @return string
+     */
+    public function cc_mime_types($mimes)
+    {
+        $mimes['svg'] = 'image/svg+xml';
+        return $mimes;
+    }
+
+    /**
      * Renders the slider as HTML.
      * @return string
      */
@@ -201,6 +221,8 @@ class UniqueHoverSliderPlus extends Plugin
         extract($attributes);
 
         $args = [
+            'posts_per_page' => 5,
+            'no_found_rows' => true,
             'post_type' => 'slide',
             'tax_query' => [
                 [
@@ -211,11 +233,6 @@ class UniqueHoverSliderPlus extends Plugin
             ]
         ];
         $slides = new WP_Query($args);
-        // echo "<pre>";
-        // print_r($slides->get_posts());
-        // echo "</pre>";
-        // die();
-
 
         return $this->render_template('slider.php', ['slides' => $slides]);
     }
