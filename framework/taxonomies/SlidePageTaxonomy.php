@@ -23,7 +23,7 @@ class SlidePageTaxonomy
                 'label' => 'Slider',
                 'query_var' => true,
                 'rewrite' => true,
-                'hierarchical' => false,
+                'hierarchical' => true,
                 'show_in_nav_menus' => false,
                 'show_tagcloud' => false,
                 'labels' => array(

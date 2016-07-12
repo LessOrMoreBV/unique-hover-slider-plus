@@ -33,11 +33,17 @@ class SlidePostType
                 'not_found'          => __('Not found', $plugin->slug),
                 'not_found_in_trash' => __('Not found in Trash', $plugin->slug),
             ],
-            'public' => true,
-            'has_archive' => true,
-            'show_in_menu' => true,
-            'menu_position' => 100,
+            'exclude_from_search' => true,
+            'has_archive' => false,
             'menu_icon' => $plugin->asset('images/icon.svg'),
+            'menu_position' => 100,
+            'public' => false,
+            'publicly_queriable' => true,
+            'rewrite' => false,
+            'show_in_menu' => true,
+            'show_in_nav_menus' => false,
+            'show_ui' => true,
+            'supports' => ['title', 'editor', 'thumbnail'],
         ]);
     }
 }
