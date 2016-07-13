@@ -54,7 +54,19 @@ class SlidePageTaxonomy implements Registerable
      * The default overlay color.
      * @var string
      */
-    const DEFAULT_COLOR = '#334D5C';
+    const DEFAULT_OVERLAY_COLOR = '#334D5C';
+
+    /**
+     * The default overlay color.
+     * @var string
+     */
+    const DEFAULT_TITLE_COLOR = '#F5C949';
+
+    /**
+     * The default overlay color.
+     * @var string
+     */
+    const DEFAULT_SUBTITLE_COLOR = '#FFFFFF';
 
     /**
      * Registers the taxonomy.
@@ -114,8 +126,16 @@ class SlidePageTaxonomy implements Registerable
 
         // Color has to be a valid hex color code.
         $overlay_color = strtoupper($input['overlay_color']);
-        if (!preg_match("/\^#?[A-F0-9]{6}$/", $overlay_color)) $overlay_color = static::DEFAULT_COLOR;
+        if (!preg_match("/^\#?[A-F0-9]{6}$/", $overlay_color)) $overlay_color = static::DEFAULT_OVERLAY_COLOR;
         if (substr($overlay_color, 0, 1) !== '#') $overlay_color = '#' . $overlay_color;
+
+        $title_color = strtoupper($input['title_color']);
+        if (!preg_match("/^\#?[A-F0-9]{6}$/", $title_color)) $title_color = static::DEFAULT_TITLE_COLOR;
+        if (substr($title_color, 0, 1) !== '#') $title_color = '#' . $title_color;
+
+        $subtitle_color = strtoupper($input['subtitle_color']);
+        if (!preg_match("/^\#?[A-F0-9]{6}$/", $subtitle_color)) $subtitle_color = static::DEFAULT_SUBTITLE_COLOR;
+        if (substr($subtitle_color, 0, 1) !== '#') $subtitle_color = '#' . $subtitle_color;
 
         // Opacity has to be between 0 - 100 with a percentage sign.
         $overlay_opacity = ( strlen($input['overlay_opacity']) > 0 ? $input['overlay_opacity'] : static::DEFAULT_OPACITY );
@@ -125,6 +145,8 @@ class SlidePageTaxonomy implements Registerable
         $overlay_opacity = (string) $overlay_opacity . '%';
 
         return [
+            'title_color' => $title_color,
+            'subtitle_color' => $subtitle_color,
             'arrow_buttons' => $arrow_buttons,
             'overlay_color' => $overlay_color,
             'overlay_opacity' => $overlay_opacity,

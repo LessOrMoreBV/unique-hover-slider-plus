@@ -23,14 +23,14 @@ if ($slides->have_posts()) {
                     $slides->the_post();
                 ?>
                     <li class="uhsp-title">
-                        <h2 class="uhsp-slide-title"><?= get_the_title(); ?></h2>
-                        <div class="uhsp-slide-subtitle"><?= get_the_content(); ?></div>
+                        <h2 class="uhsp-slide-title" style="color: <?= $meta['title_color'] ?>;"><?= get_the_title(); ?></h2>
+                        <div class="uhsp-slide-subtitle" style="color: <?= $meta['subtitle_color'] ?>;"><?= get_the_content(); ?></div>
                     </li>
                 <?php
                 }
                 ?>
                 <div class="uhsp-hover-bar">
-                    <div class="uhsp-hover-bar-color"></div>
+                    <div class="uhsp-hover-bar-color" style="background-color: <?= $meta['title_color'] ?>;"></div>
                 </div>
             </ul>
         </section>
