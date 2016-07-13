@@ -83,6 +83,10 @@ class SlidePageTaxonomy implements Registerable
 
         add_action(self::TAXONOMY . '_add_form_fields', [$this, 'add_form_fields']);
         add_action(self::TAXONOMY . '_edit_form_fields', [$this, 'edit_form_fields']);
+        add_action('create_' . self::TAXONOMY, [$this, 'save_custom_meta']);
+        add_action('edited_' . self::TAXONOMY, [$this, 'save_custom_meta']);
+        add_filter('manage_edit-' . self::TAXONOMY . '_columns' , [$this, 'table_heading']);
+        add_filter('manage_' . self::TAXONOMY . '_custom_column', [$this, 'table_column'], 5, 3);
     }
 
     /**
@@ -98,8 +102,48 @@ class SlidePageTaxonomy implements Registerable
      * Adds extra form fields to the edit existing taxonomy page.
      * @return void
      */
-    public function edit_form_fields()
+    public function edit_form_fields($slide_page)
     {
-        echo $this->plugin->render_template('slide_page_edit_form_fields.php');
+        $id = $slide_page->term_id;
+        $opt = 'taxonomy_' . self::TAXONOMY . '_' . $id;
+        $meta = get_option($opt);
+
+        echo $this->plugin->render_template('slide_page_edit_form_fields.php', ['meta' => $meta]);
+    }
+
+    /**
+     * Stores custom meta data for the given ID.
+     * @param  integer $id
+     * @return void
+     */
+    public function save_custom_meta($id)
+    {
+        if (isset($_POST[self::TAXONOMY . '_meta'])) {
+            // Manually set the arrow option to a boolean value.
+            $_POST[self::TAXONOMY . '_meta']['arrow_buttons'] = (int) array_key_exists('arrow_buttons', $_POST[self::TAXONOMY . '_meta']);
+
+            $opt = 'taxonomy_' . self::TAXONOMY . '_' . $id;
+            $meta = get_option($opt);
+
+            foreach ($_POST[self::TAXONOMY . '_meta'] as $key => $value) {
+                $meta[$key] = $value;
+            }
+
+            update_option($opt, $meta);
+        }
+    }
+
+    public function table_heading($headings)
+    {
+        $cb = array_splice($headings, 0, 1);
+        $headings = $cb + [self::TAXONOMY . '_id' => __('ID', $this->translate_key)] + $headings;
+        return $headings;
+    }
+
+    public function table_column($value, $col_name, $id)
+    {
+        if ($col_name === self::TAXONOMY . '_id') {
+            return $id;
+        }
     }
 }

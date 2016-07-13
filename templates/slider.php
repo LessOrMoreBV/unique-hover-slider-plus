@@ -3,12 +3,18 @@ if ($slides->have_posts()) {
 ?>
     <section class="uhsp-slider-wrapper">
 
+        <?php
+        if ($meta['arrow_buttons']) {
+        ?>
         <div class="uhsp-left">
             <svg viewBox="0 0 12.657 23.749"><polyline points="12.304,0.354 0.707,11.95 12.153,23.396 "/></svg>
         </div>
         <div class="uhsp-right">
             <svg viewBox="0 0 12.657 23.749"><polyline points="0.707,23.396 12.304,11.799 0.858,0.354 "/></svg>
         </div>
+        <?php
+        }
+        ?>
 
         <section class="uhsp-slider-titles">
             <ul class="uhsp-title-list">
@@ -36,7 +42,7 @@ if ($slides->have_posts()) {
             ?>
             <article class="uhsp-single-slide" style="background-image: url('<?= wp_get_attachment_image_src(the_post_thumbnail_url()) ?>')">
                 <img class="uhsp-single-image" src="<?= MultiPostThumbnails::get_post_thumbnail_url('slide', 'foreground-icon', get_the_ID(), 'uhsp-foreground-icon@2x') ?>" alt="<?= get_the_title() ?>">
-                <div class="ushp-slide-overlay"></div>
+                <div class="ushp-slide-overlay" style="background-color: <?= $meta['overlay_color'] ?>; opacity: <?= $meta['overlay_opacity'] ?>;"></div>
             </article>
             <?php
             }

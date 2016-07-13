@@ -220,6 +220,7 @@ class UniqueHoverSliderPlus extends Plugin
     {
         extract($attributes);
 
+        // Retrieve the slides belonging to the slide_page.
         $args = [
             'posts_per_page' => 5,
             'no_found_rows' => true,
@@ -227,14 +228,19 @@ class UniqueHoverSliderPlus extends Plugin
             'tax_query' => [
                 [
                     'taxonomy' => SlidePageTaxonomy::TAXONOMY,
-                    'field' => 'slug',
+                    'field' => 'id',
                     'terms' => $id,
                 ]
             ]
         ];
         $slides = new WP_Query($args);
 
-        return $this->render_template('slider.php', ['slides' => $slides]);
+        // Retrieve the extra meta.
+        $opt = 'taxonomy_' . SlidePageTaxonomy::TAXONOMY . '_' . $id;
+        $meta = get_option($opt);
+        $meta['overlay_opacity'] = (int) str_replace('%', '', $meta['overlay_opacity']) / 100;
+
+        return $this->render_template('slider.php', ['slides' => $slides, 'meta' => $meta]);
     }
 
     /**
