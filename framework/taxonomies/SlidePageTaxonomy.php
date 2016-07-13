@@ -105,8 +105,7 @@ class SlidePageTaxonomy implements Registerable
     public function edit_form_fields($slide_page)
     {
         $id = $slide_page->term_id;
-        $opt = 'taxonomy_' . self::TAXONOMY . '_' . $id;
-        $meta = get_option($opt);
+        $meta = static::get_option($id);
 
         echo $this->plugin->render_template('slide_page_edit_form_fields.php', ['meta' => $meta]);
     }
@@ -122,17 +121,21 @@ class SlidePageTaxonomy implements Registerable
             // Manually set the arrow option to a boolean value.
             $_POST[self::TAXONOMY . '_meta']['arrow_buttons'] = (int) array_key_exists('arrow_buttons', $_POST[self::TAXONOMY . '_meta']);
 
-            $opt = 'taxonomy_' . self::TAXONOMY . '_' . $id;
-            $meta = get_option($opt);
+            $meta = static::get_option($id);
 
             foreach ($_POST[self::TAXONOMY . '_meta'] as $key => $value) {
                 $meta[$key] = $value;
             }
 
-            update_option($opt, $meta);
+            static::update_option($id, $meta);
         }
     }
 
+    /**
+     * Inserts the slider ID into the taxonomy table heading.
+     * @param  array $headings
+     * @return array
+     */
     public function table_heading($headings)
     {
         $cb = array_splice($headings, 0, 1);
@@ -140,10 +143,55 @@ class SlidePageTaxonomy implements Registerable
         return $headings;
     }
 
+    /**
+     * Inserts the slider ID into the taxonomy table columns.
+     * @param  mixed   $value
+     * @param  string  $col_name
+     * @param  integer $id
+     * @return integer
+     */
     public function table_column($value, $col_name, $id)
     {
         if ($col_name === self::TAXONOMY . '_id') {
             return $id;
         }
+    }
+
+    /**
+     * Updates the meta belonging to the given slider id.
+     * @param  integer $id
+     * @param  array   $meta
+     * @return void
+     */
+    public static function update_option($id, $meta)
+    {
+        $opt = 'taxonomy_' . self::TAXONOMY . '_' . $id;
+        update_option($opt, $meta);
+    }
+
+    /**
+     * Retrieves the option belonging to the given slider id.
+     * @param  integer $id
+     * @return array
+     */
+    public static function get_option($id)
+    {
+        $opt = 'taxonomy_' . self::TAXONOMY . '_' . $id;
+        return get_option($opt);
+    }
+
+    /**
+     * Formats the options array to be used in a template.
+     * @param  integer $id
+     * @return array
+     */
+    public static function get_formatted_option($id)
+    {
+        $meta = static::get_option($id);
+
+        // Replace properties to be used within HTML / CSS.
+        $meta['overlay_opacity'] = (int) str_replace('%', '', $meta['overlay_opacity']) / 100;
+
+        return $meta;
     }
 }

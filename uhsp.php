@@ -236,9 +236,7 @@ class UniqueHoverSliderPlus extends Plugin
         $slides = new WP_Query($args);
 
         // Retrieve the extra meta.
-        $opt = 'taxonomy_' . SlidePageTaxonomy::TAXONOMY . '_' . $id;
-        $meta = get_option($opt);
-        $meta['overlay_opacity'] = (int) str_replace('%', '', $meta['overlay_opacity']) / 100;
+        $meta = SlidePageTaxonomy::get_formatted_option($id);
 
         return $this->render_template('slider.php', ['slides' => $slides, 'meta' => $meta]);
     }
