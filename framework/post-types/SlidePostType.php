@@ -9,12 +9,15 @@ if (! defined('ABSPATH')) {
 
 require_once(__DIR__ . '/../core/Plugin.php');
 require_once(__DIR__ . '/../core/Registerable.php');
+require_once(__DIR__ . '/../taxonomies/SlidePageTaxonomy.php');
 require_once(__DIR__ . '/../vendor/MultiPostThumbnails/MultiPostThumbnails.php');
 
 // Include base plugin class.
 use UniqueHoverSliderPlus\Core\Plugin;
 use UniqueHoverSliderPlus\Core\Registerable;
+use UniqueHoverSliderPlus\Taxonomies\SlidePageTaxonomy;
 use MultiPostThumbnails;
+use WP_Query;
 
 class SlidePostType implements Registerable
 {
@@ -94,15 +97,25 @@ class SlidePostType implements Registerable
         ]);
     }
 
-    // public function add_meta_box()
-    // {
-    //     add_meta_box(self::POST_TYPE . '_foreground_image', 'Foreground Image', [$this, 'foreground_image'], self::POST_TYPE, 'normal', 'high');
-    // }
-
-    // public function foreground_image()
-    // {
-    //     global $post;
-    //     $post_ID = $post->ID; // global used by get_upload_iframe_src
-    //     printf("<iframe frameborder='0' src=' %s ' style='width: 100%%; height: 400px;'> </iframe>", get_upload_iframe_src('media'));
-    // }
+    /**
+     * Queries sliders belonging to a given slider.
+     * @param  integer  $id
+     * @return WP_Query
+     */
+    public static function query_slides_of_slider($id)
+    {
+        $args = [
+            'posts_per_page' => 5,
+            'no_found_rows' => true,
+            'post_type' => 'slide',
+            'tax_query' => [
+                [
+                    'taxonomy' => SlidePageTaxonomy::TAXONOMY,
+                    'field' => 'id',
+                    'terms' => $id,
+                ]
+            ]
+        ];
+        return new WP_Query($args);
+    }
 }

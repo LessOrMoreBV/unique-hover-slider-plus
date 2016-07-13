@@ -61,42 +61,6 @@ class UniqueHoverSliderPlus extends Plugin
     public $version = '0.1.0';
 
     /**
-     * The options used by this plugin.
-     * @var array
-     */
-    protected $options = [
-        // ...
-    ];
-
-    /**
-     * Top level menu pages. Please don't add more than one.. and make
-     * sure that the one you do add is really required to be a top level
-     * menu item.
-     * @var array
-     *
-    protected $menu_pages = [
-        [
-            'menu_slug' => 'uhsp-menu',
-            'method' => 'menu_dashboard',
-            'icon' => 'images/icon.svg',
-            'children' => [
-                [
-                    'page_title' => 'USHP Slides',
-                    'menu_title' => 'Slides',
-                    'menu_slug' => 'uhsp-slides',
-                    'method' => 'menu_slides'
-                ],
-                [
-                    'page_title' => 'USHP Sliders',
-                    'menu_title' => 'Sliders',
-                    'menu_slug' => 'uhsp-sliders',
-                    'method' => 'menu_sliders'
-                ],
-            ]
-        ],
-    ];/**/
-
-    /**
      * Hooks automatically registered during the boot
      * sequence of the class.
      * @var array
@@ -126,22 +90,15 @@ class UniqueHoverSliderPlus extends Plugin
     ];
 
     /**
-     * Automatically called when the class is done booting.
-     * @return void
-     */
-    public function boot()
-    {
-        // ...
-    }
-
-    /**
-     * Register custom post types on init.
+     * Register custom post types and image sizes on init.
      * @return void
      */
     public function on_init()
     {
+        // Image sizes required for the foreground icon.
         add_image_size('uhsp-foreground-icon@2x', 740, 500, true);
         add_image_size('uhsp-foreground-icon', 370, 250, true);
+
         $this->register_post_type(new SlidePostType);
         $this->register_taxonomy(new SlidePageTaxonomy);
     }
@@ -157,40 +114,6 @@ class UniqueHoverSliderPlus extends Plugin
         $this->enqueue_script('script', 'js/script.js', ['jquery']);
         $this->enqueue_style('style', 'css/stylesheet.min.css');
     }
-
-    /**
-     * What the options page should look like. Automatically called as part
-     * of the add_options_page method which in turn is called on the admin_menu
-     * hook.
-     * @hook   admin_menu
-     * @return void
-     */
-    // public function menu_dashboard()
-    // {
-    //     // Kills the page if the user doesn't have enough permissions.
-    //     $this->check_user_permission('modify');
-
-    //     // Echo the rendered template.
-    //     echo $this->render_template('menu_dashboard.php');
-    // }
-
-    /**
-     * Renders the slides page.
-     * @return void
-     */
-    // public function menu_slides()
-    // {
-    //     echo "<h2>UHSP Slides</h2>";
-    // }
-
-    /**
-     * Renders the sliders page.
-     * @return string
-     */
-    // public function menu_sliders()
-    // {
-    //     echo "<h2>UHSP Sliders</h2>";
-    // }
 
     /**
      * Renders an extra meta tag to manage the viewport on mobile.
@@ -218,39 +141,16 @@ class UniqueHoverSliderPlus extends Plugin
      */
     public function render_slider($attributes, $content)
     {
+        // ID will be available in the list of attributes.
         extract($attributes);
 
         // Retrieve the slides belonging to the slide_page.
-        $args = [
-            'posts_per_page' => 5,
-            'no_found_rows' => true,
-            'post_type' => 'slide',
-            'tax_query' => [
-                [
-                    'taxonomy' => SlidePageTaxonomy::TAXONOMY,
-                    'field' => 'id',
-                    'terms' => $id,
-                ]
-            ]
-        ];
-        $slides = new WP_Query($args);
+        $slides = SlidePostType::query_slides_of_slider($id);
 
         // Retrieve the extra meta.
         $meta = SlidePageTaxonomy::get_formatted_option($id);
 
         return $this->render_template('slider.php', ['slides' => $slides, 'meta' => $meta]);
-    }
-
-    /**
-     * When a new slider is submitted via a form.
-     * @return void
-     */
-    public function on_add_slider()
-    {
-        // Kills the page if the user doesn't have enough permissions.
-        $this->check_user_permission('modify');
-
-        // ... Do stuff.
     }
 }
 

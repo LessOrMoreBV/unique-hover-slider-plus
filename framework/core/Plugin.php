@@ -95,6 +95,12 @@ abstract class Plugin
     protected $menu_pages = [];
 
     /**
+     * Options to automatically register for the plugin.
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * A list of hooks and their method registration.
      * @var array
      */
