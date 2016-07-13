@@ -7,8 +7,7 @@
   color: white;
   cursor: pointer;
   fill: none;
-  height: 700px;
-  line-height: 700px;
+  height: 100%;
   opacity: 1;
   position: absolute;
   stroke: white;
@@ -37,16 +36,6 @@
 }
 .uhsp-slider-wrapper .uhsp-right:hover {
   padding-right: 6px;
-}
-.uhsp-slider-wrapper[max-width~="1024px"] .uhsp-left,
-.uhsp-slider-wrapper[max-width~="1024px"] .uhsp-right {
-  height: 600px;
-  line-height: 600px;
-}
-.uhsp-slider-wrapper[max-width~="667px"] .uhsp-left,
-.uhsp-slider-wrapper[max-width~="667px"] .uhsp-right {
-  height: 400px;
-  line-height: 400px;
 }
 
 .uhsp-slider-wrapper.uhsp-amount-1 .uhsp-slider-images {

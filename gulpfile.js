@@ -70,6 +70,24 @@ gulp.task('vendor', function() {
     .pipe(notify({ title: 'Javascript', message: 'Compiled and minified' }));
 });
 
+// Compile colorpicker JS and map and minify.
+gulp.task('colorpicker', function() {
+    return gulp.src([
+        './source/js/colorpicker/colors.js',
+        './source/js/colorpicker/jqColorPicker.js',
+        './source/js/colorpicker/script.js'
+    ])
+    .pipe(plumber({errorHandler: errorAlert}))
+    .pipe(sourcemaps.init())
+    .pipe(concat('colorpicker.js'))
+    .pipe(gulp.dest('./assets/js/'))
+    .pipe(rename('colorpicker.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('./assets/js/'))
+    .pipe(notify({ title: 'Javascript', message: 'Compiled and minified' }));
+});
+
 // Compile images to retina friendly.
 gulp.task('images', function() {
     gulp.src('./source/images/**/*.{png,jpg,jpeg}')
@@ -81,6 +99,7 @@ gulp.task('images', function() {
 gulp.task('watch', function() {
     gulp.watch('source/sass/**/*.scss', ['compass']);
     gulp.watch('source/js/**/*.js', ['scripts']);
+    gulp.watch('source/js/**/*.js', ['colorpicker']);
     gulp.watch('source/images/**/*.{png,jpg,jpeg}', ['images']);
 });
 

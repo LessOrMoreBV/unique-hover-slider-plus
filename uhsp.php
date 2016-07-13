@@ -67,6 +67,7 @@ class UniqueHoverSliderPlus extends Plugin
      */
     protected $hooks = [
         ['wp_enqueue_scripts', 'assets'],
+        ['admin_enqueue_scripts', 'admin_assets'],
         ['wp_head', 'meta_viewport'],
         ['uhsp_add_slider', 'on_add_slider'],
         ['init', 'on_init'],
@@ -113,6 +114,16 @@ class UniqueHoverSliderPlus extends Plugin
         $this->enqueue_script('vendor', 'js/vendor.js');
         $this->enqueue_script('script', 'js/script.js', ['jquery']);
         $this->enqueue_style('style', 'css/stylesheet.min.css');
+    }
+
+    /**
+     * Loads admin assets. Automatically called after 'wp_enqueue_scripts' hook.
+     * @hook   wp_enqueue_scripts
+     * @return void
+     */
+    public function admin_assets()
+    {
+        $this->enqueue_script('colorpicker', 'js/colorpicker.js', ['jquery']);
     }
 
     /**

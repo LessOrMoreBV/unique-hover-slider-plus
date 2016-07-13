@@ -1,7 +1,7 @@
 <tr class="form-field">
     <th scope="row" valign="top"><label for="overlay_color"><?= _e('Overlay color', $this->translate_key) ?></label></th>
     <td>
-        <input type="text" name="slide_page_meta[overlay_color]" id="overlay_color" size="40" placeholder="#334D5C" value="<?= ( $meta['overlay_color'] ? $meta['overlay_color'] : '' ) ?>">
+        <input type="text" name="slide_page_meta[overlay_color]" id="overlay_color" size="40" placeholder="#334D5C" class="colorpicker" value="<?= ( $meta['overlay_color'] ? $meta['overlay_color'] : '' ) ?>">
         <p class="description"><?= _e('Set a hexadecimal color code for the overlay that covers the slider.', $this->translate_key) ?></p>
     </td>
 </tr>

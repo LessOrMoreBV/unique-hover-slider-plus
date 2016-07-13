@@ -1,11 +1,6 @@
 @import "compass/css3/box-sizing";
 @import "compass/css3/transition";
 
-// @mixin mobile {  @media only screen and (max-width: 667px) { @content; } }
-// @mixin mini {    @media only screen and (max-width: 800px) { @content; } }
-// @mixin tablet {  @media only screen and (max-width: 1024px) { @content; } }
-// @mixin desktop { @media only screen and (max-width: $uhsp-maxWidth) { @content; } }
-
 @mixin mobile {  &[max-width~="667px"] { @content; }  }
 @mixin mini {    &[max-width~="800px"] { @content; }  }
 @mixin tablet {  &[max-width~="1024px"] { @content; }  }

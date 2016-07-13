@@ -5,8 +5,7 @@
         color: white;
         cursor: pointer;
         fill: none;
-        height: $uhsp-height-desktop;
-        line-height: $uhsp-height-desktop;
+        height: 100%;
         opacity: 1;
         position: absolute;
         stroke: white;
@@ -36,22 +35,6 @@
         right: 0;
         &:hover {
             padding-right: 6px;
-        }
-    }
-
-    @include tablet {
-        .uhsp-left,
-        .uhsp-right {
-            height: $uhsp-height-tablet;
-            line-height: $uhsp-height-tablet;
-        }
-    }
-
-    @include mobile {
-        .uhsp-left,
-        .uhsp-right {
-            height: $uhsp-height-mobile;
-            line-height: $uhsp-height-mobile;
         }
     }
 }
