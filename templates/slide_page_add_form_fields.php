@@ -1,15 +1,15 @@
 <div class="form-field">
-    <label for="overlay_color">Overlay color</label>
+    <label for="overlay_color"><?= _e('Overlay color', $this->translate_key) ?></label>
     <input type="text" name="overlay_color" id="overlay_color" placeholder="#FF0000">
-    <p>Set a hexadecimal color code for the overlay that covers the slider.</p>
+    <p><?= _e('Set a hexadecimal color code for the overlay that covers the slider.', $this->translate_key) ?></p>
 </div>
 <div class="form-field">
-    <label for="overlay_opacity">Overlay opacity</label>
+    <label for="overlay_opacity"><?= _e('Overlay opacity', $this->translate_key) ?></label>
     <input type="text" name="overlay_opacity" id="overlay_opacity" placeholder="60%">
-    <p>Set the transparancy value of the overlay. If you want to disable the overlay you can set this value to 0%.</p>
+    <p><?= _e('Set the transparancy value of the overlay. If you want to disable the overlay you can set this value to 0%.', $this->translate_key) ?></p>
 </div>
 <div class="form-field">
-    <label for="arrow_buttons">Arrow buttons</label>
+    <label for="arrow_buttons"><?= _e('Arrow buttons', $this->translate_key) ?></label>
     <input type="checkbox" name="arrow_buttons" id="arrow_buttons">
-    <p>Check the box if you want to activate the navigation arrows on the left and right side of the slider.</p>
+    <p><?= _e('Check the box if you want to activate the navigation arrows on the left and right side of the slider.', $this->translate_key) ?></p>
 </div>

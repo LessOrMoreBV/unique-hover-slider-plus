@@ -23,12 +23,19 @@ class SlidePageTaxonomy implements Registerable
     protected $plugin;
 
     /**
+     * The translate key used for all translations.
+     * @var string
+     */
+    public $translate_key;
+
+    /**
      * Sets the parent plugin.
      * @param Plugin $plugin
      */
     public function set_parent(Plugin $plugin)
     {
         $this->plugin = $plugin;
+        $this->translate_key = $plugin->translate_key;
     }
 
     /**
@@ -42,6 +49,11 @@ class SlidePageTaxonomy implements Registerable
      */
     public function register()
     {
+        // The parent is required to register the post type.
+        if (!$this->plugin) {
+            throw new Exception('Could not register taxonomy: ' . self::TAXONOMY . ' - Could not find parent plugin to register to.');
+        }
+
         register_taxonomy(self::TAXONOMY, 'slide',
             array(
                 'hierarchical' => true,
@@ -52,19 +64,19 @@ class SlidePageTaxonomy implements Registerable
                 'show_in_nav_menus' => false,
                 'show_tagcloud' => false,
                 'labels' => array(
-                    'name'                       => __('Sliders', $this->plugin->slug),
-                    'singular_name'              => __('Slider', $this->plugin->slug),
-                    'menu_name'                  => __('Add or Edit Sliders', $this->plugin->slug),
-                    'all_items'                  => __('All Sliders', $this->plugin->slug),
-                    'new_item_name'              => __('New Slider Name', $this->plugin->slug),
-                    'add_new_item'               => __('Add Slider', $this->plugin->slug),
-                    'edit_item'                  => __('Edit Slider', $this->plugin->slug),
-                    'update_item'                => __('Update Slider', $this->plugin->slug),
-                    'separate_items_with_commas' => __('Separate sliders with commas', $this->plugin->slug),
-                    'search_items'               => __('Search Sliders', $this->plugin->slug),
-                    'add_or_remove_items'        => __('Add or remove sliders', $this->plugin->slug),
-                    'choose_from_most_used'      => __('Choose from the most used sliders', $this->plugin->slug),
-                    'not_found'                  => __('Not Found', $this->plugin->slug),
+                    'name'                       => __('Sliders', $this->translate_key),
+                    'singular_name'              => __('Slider', $this->translate_key),
+                    'menu_name'                  => __('Add or Edit Sliders', $this->translate_key),
+                    'all_items'                  => __('All Sliders', $this->translate_key),
+                    'new_item_name'              => __('New Slider Name', $this->translate_key),
+                    'add_new_item'               => __('Add Slider', $this->translate_key),
+                    'edit_item'                  => __('Edit Slider', $this->translate_key),
+                    'update_item'                => __('Update Slider', $this->translate_key),
+                    'separate_items_with_commas' => __('Separate sliders with commas', $this->translate_key),
+                    'search_items'               => __('Search Sliders', $this->translate_key),
+                    'add_or_remove_items'        => __('Add or remove sliders', $this->translate_key),
+                    'choose_from_most_used'      => __('Choose from the most used sliders', $this->translate_key),
+                    'not_found'                  => __('Not Found', $this->translate_key),
                 ),
             )
         );

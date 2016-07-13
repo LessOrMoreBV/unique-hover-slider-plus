@@ -25,12 +25,19 @@ class SlidePostType implements Registerable
     protected $plugin;
 
     /**
+     * The translate key used for all translations.
+     * @var string
+     */
+    public $translate_key;
+
+    /**
      * Sets the parent plugin.
      * @param Plugin $plugin
      */
     public function set_parent(Plugin $plugin)
     {
         $this->plugin = $plugin;
+        $this->translate_key = $plugin->translate_key;
     }
 
     /**
@@ -44,21 +51,26 @@ class SlidePostType implements Registerable
      */
     public function register()
     {
+        // The parent is required to register the post type.
+        if (!$this->plugin) {
+            throw new Exception('Could not register custom post type: ' . self::POST_TYPE . ' - Could not find parent plugin to register to.');
+        }
+
         register_post_type(self::POST_TYPE, [
             'labels' => [
-                'name'               => __('Slides', $this->plugin->slug),
-                'singular_name'      => __('Slide', $this->plugin->slug),
-                'menu_name'          => __('UHSP Slider', $this->plugin->slug),
-                'parent_item_colon'  => __('Parent Slide:', $this->plugin->slug),
-                'all_items'          => __('Add or Edit Slides', $this->plugin->slug),
-                'view_item'          => __('View Slide', $this->plugin->slug),
-                'add_new_item'       => __('Add New Slide', $this->plugin->slug),
-                'add_new'            => __('Add New Slide', $this->plugin->slug),
-                'edit_item'          => __('Edit Slide', $this->plugin->slug),
-                'update_item'        => __('Update Slide', $this->plugin->slug),
-                'search_items'       => __('Search Slide', $this->plugin->slug),
-                'not_found'          => __('Not found', $this->plugin->slug),
-                'not_found_in_trash' => __('Not found in Trash', $this->plugin->slug),
+                'name'               => __('Slides', $this->translate_key),
+                'singular_name'      => __('Slide', $this->translate_key),
+                'menu_name'          => __('UHSP Slider', $this->translate_key),
+                'parent_item_colon'  => __('Parent Slide:', $this->translate_key),
+                'all_items'          => __('Add or Edit Slides', $this->translate_key),
+                'view_item'          => __('View Slide', $this->translate_key),
+                'add_new_item'       => __('Add New Slide', $this->translate_key),
+                'add_new'            => __('Add New Slide', $this->translate_key),
+                'edit_item'          => __('Edit Slide', $this->translate_key),
+                'update_item'        => __('Update Slide', $this->translate_key),
+                'search_items'       => __('Search Slide', $this->translate_key),
+                'not_found'          => __('Not found', $this->translate_key),
+                'not_found_in_trash' => __('Not found in Trash', $this->translate_key),
             ],
             'exclude_from_search' => true,
             'has_archive' => false,
