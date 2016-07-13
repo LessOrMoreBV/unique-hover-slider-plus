@@ -37,17 +37,16 @@
 
             img.uhsp-single-image {
                 bottom: 200px;
-                height: 36%;
-                left: calc(50% - 220px);
-                max-height: 36%;
-                min-height: 36%;
+                height: 250px;
+                left: calc(50% - 185px);
+                // max-height: 36%;
+                // min-height: 36%;
                 position: absolute;
-                width: 440px;
+                width: 370px;
                 z-index: 1;
             }
 
             .ushp-slide-overlay {
-                background-color: mix($uhsp-blue, transparent, 75);
                 height: 100%;
                 left: 0;
                 position: absolute;

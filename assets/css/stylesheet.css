@@ -16,10 +16,13 @@
   width: 40px;
   z-index: 2;
 }
-.uhsp-slider-wrapper .uhsp-left svg,
-.uhsp-slider-wrapper .uhsp-right svg {
-  height: 700px;
-  width: 18px;
+.uhsp-slider-wrapper .uhsp-left img,
+.uhsp-slider-wrapper .uhsp-right img {
+  height: 33px;
+  margin-top: -17px;
+  position: relative;
+  top: 50%;
+  width: 17px;
 }
 .uhsp-slider-wrapper .uhsp-left {
   left: 0;
@@ -40,18 +43,10 @@
   height: 600px;
   line-height: 600px;
 }
-.uhsp-slider-wrapper[max-width~="1024px"] .uhsp-left svg,
-.uhsp-slider-wrapper[max-width~="1024px"] .uhsp-right svg {
-  height: 600px;
-}
 .uhsp-slider-wrapper[max-width~="667px"] .uhsp-left,
 .uhsp-slider-wrapper[max-width~="667px"] .uhsp-right {
   height: 400px;
   line-height: 400px;
-}
-.uhsp-slider-wrapper[max-width~="667px"] .uhsp-left svg,
-.uhsp-slider-wrapper[max-width~="667px"] .uhsp-right svg {
-  height: 400px;
 }
 
 .uhsp-slider-wrapper.uhsp-amount-1 .uhsp-slider-images {
@@ -116,16 +111,13 @@
 }
 .uhsp-slider-wrapper .uhsp-slider-images .uhsp-single-slide img.uhsp-single-image {
   bottom: 200px;
-  height: 36%;
-  left: calc(50% - 220px);
-  max-height: 36%;
-  min-height: 36%;
+  height: 250px;
+  left: calc(50% - 185px);
   position: absolute;
-  width: 440px;
+  width: 370px;
   z-index: 1;
 }
 .uhsp-slider-wrapper .uhsp-slider-images .uhsp-single-slide .ushp-slide-overlay {
-  background-color: rgba(51, 77, 92, 0.75);
   height: 100%;
   left: 0;
   position: absolute;

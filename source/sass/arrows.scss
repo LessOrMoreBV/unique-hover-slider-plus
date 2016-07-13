@@ -14,9 +14,12 @@
         width: 40px;
         z-index: 2;
 
-        svg {
-            height: $uhsp-height-desktop;
-            width: 18px;
+        img {
+            height: 33px;
+            margin-top: -17px;
+            position: relative;
+            top: 50%;
+            width: 17px;
         }
     }
 
@@ -41,22 +44,14 @@
         .uhsp-right {
             height: $uhsp-height-tablet;
             line-height: $uhsp-height-tablet;
-
-            svg {
-                height: $uhsp-height-tablet;
-            }
         }
     }
-    
+
     @include mobile {
         .uhsp-left,
         .uhsp-right {
             height: $uhsp-height-mobile;
             line-height: $uhsp-height-mobile;
-
-            svg {
-                height: $uhsp-height-mobile;
-            }
         }
     }
 }

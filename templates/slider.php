@@ -7,10 +7,10 @@ if ($slides->have_posts()) {
         if ($meta['arrow_buttons']) {
         ?>
         <div class="uhsp-left">
-            <svg viewBox="0 0 12.657 23.749"><polyline points="12.304,0.354 0.707,11.95 12.153,23.396 "/></svg>
+            <img src="<?= $this->asset('images/arrow-left@2x.png') ?>">
         </div>
         <div class="uhsp-right">
-            <svg viewBox="0 0 12.657 23.749"><polyline points="0.707,23.396 12.304,11.799 0.858,0.354 "/></svg>
+            <img src="<?= $this->asset('images/arrow-right@2x.png') ?>">
         </div>
         <?php
         }
