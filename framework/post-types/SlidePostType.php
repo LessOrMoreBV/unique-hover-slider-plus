@@ -77,6 +77,7 @@ class SlidePostType implements Registerable
             ],
             'exclude_from_search' => true,
             'has_archive' => false,
+            'hierarchical' => false,
             'menu_icon' => $this->plugin->asset('images/icon.svg'),
             'menu_position' => 100,
             'public' => false,
@@ -87,7 +88,7 @@ class SlidePostType implements Registerable
             'show_in_menu' => true,
             'show_in_nav_menus' => false,
             'show_ui' => true,
-            'supports' => ['title', 'editor', 'thumbnail'],
+            'supports' => ['title', 'editor', 'thumbnail', 'page-attributes'],
         ]);
 
         new MultiPostThumbnails([
@@ -95,6 +96,46 @@ class SlidePostType implements Registerable
             'id' => 'foreground-icon',
             'post_type' => self::POST_TYPE
         ]);
+
+        add_filter('manage_edit-' . self::POST_TYPE . '_columns' , [$this, 'table_heading']);
+        add_filter('manage_' . self::POST_TYPE . '_posts_custom_column', [$this, 'table_column']);
+        add_filter('manage_edit-' . self::POST_TYPE . '_sortable_columns',[$this, 'table_sortable']);
+    }
+
+    /**
+     * Adds the order of the slides into the overview table.
+     * @param  array $headings
+     * @return array
+     */
+    public function table_heading($headings)
+    {
+        $headings[self::POST_TYPE . '_order'] = __('Order', $this->translate_key);
+        return $headings;
+    }
+
+    /**
+     * Inserts the order into the post type table columns.
+     * @param  string  $col_name
+     * @return integer
+     */
+    public function table_column($col_name)
+    {
+        global $post;
+
+        if ($col_name === self::POST_TYPE . '_order') {
+            echo $post->menu_order;
+        }
+    }
+
+    /**
+     * Allow the table to be sortable by menu_order.
+     * @param  array $columns
+     * @return array
+     */
+    public function table_sortable($columns)
+    {
+        $columns[self::POST_TYPE . '_order'] = 'menu_order';
+        return $columns;
     }
 
     /**
@@ -108,6 +149,7 @@ class SlidePostType implements Registerable
             'posts_per_page' => 5,
             'no_found_rows' => true,
             'post_type' => 'slide',
+            'orderby' => 'menu_order',
             'tax_query' => [
                 [
                     'taxonomy' => SlidePageTaxonomy::TAXONOMY,
