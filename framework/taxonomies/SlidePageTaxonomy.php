@@ -68,5 +68,26 @@ class SlidePageTaxonomy implements Registerable
                 ),
             )
         );
+
+        add_action(self::TAXONOMY . '_add_form_fields', [$this, 'add_form_fields']);
+        add_action(self::TAXONOMY . '_edit_form_fields', [$this, 'edit_form_fields']);
+    }
+
+    /**
+     * Adds extra form fields to the create new taxonomy page.
+     * @return void
+     */
+    public function add_form_fields()
+    {
+        echo $this->plugin->render_template('slide_page_add_form_fields.php');
+    }
+
+    /**
+     * Adds extra form fields to the edit existing taxonomy page.
+     * @return void
+     */
+    public function edit_form_fields()
+    {
+        echo $this->plugin->render_template('slide_page_edit_form_fields.php');
     }
 }

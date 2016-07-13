@@ -35,7 +35,7 @@ if ($slides->have_posts()) {
                 $slides->the_post();
             ?>
             <article class="uhsp-single-slide" style="background-image: url('<?= wp_get_attachment_image_src(the_post_thumbnail_url()) ?>')">
-                <img class="uhsp-single-image" src="<?= MultiPostThumbnails::get_post_thumbnail_url('slide', 'foreground-icon', get_the_ID(), 'uhsp-foreground-icon') ?>" alt="web-applicaties">
+                <img class="uhsp-single-image" src="<?= MultiPostThumbnails::get_post_thumbnail_url('slide', 'foreground-icon', get_the_ID(), 'uhsp-foreground-icon@2x') ?>" alt="web-applicaties">
                 <div class="ushp-slide-overlay"></div>
             </article>
             <?php

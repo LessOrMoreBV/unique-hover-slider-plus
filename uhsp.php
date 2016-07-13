@@ -140,7 +140,7 @@ class UniqueHoverSliderPlus extends Plugin
      */
     public function on_init()
     {
-        add_image_size('uhsp-foreground-icon-retina', 740, 500, true);
+        add_image_size('uhsp-foreground-icon@2x', 740, 500, true);
         add_image_size('uhsp-foreground-icon', 370, 250, true);
         $this->register_post_type(new SlidePostType);
         $this->register_taxonomy(new SlidePageTaxonomy);
