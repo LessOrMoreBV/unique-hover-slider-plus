@@ -65,7 +65,7 @@ class SlidePostType implements Registerable
                 'singular_name'      => __('Slide', $this->translate_key),
                 'menu_name'          => __('UHSP Slider', $this->translate_key),
                 'parent_item_colon'  => __('Parent Slide:', $this->translate_key),
-                'all_items'          => __('Add or Edit Slides', $this->translate_key),
+                'all_items'          => __('Edit Slides', $this->translate_key),
                 'view_item'          => __('View Slide', $this->translate_key),
                 'add_new_item'       => __('Add New Slide', $this->translate_key),
                 'add_new'            => __('Add New Slide', $this->translate_key),

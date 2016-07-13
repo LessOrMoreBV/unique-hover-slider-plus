@@ -19,3 +19,10 @@
         <p class="description"><?= _e('Check the box if you want to activate the navigation arrows on the left and right side of the slider.', $this->translate_key) ?></p>
     </td>
 </tr>
+<tr>
+    <th scope="row" valign="top"><label for="arrow_buttons"><?= _e('Shortcode', $this->translate_key) ?></label></th>
+    <td>
+        <input type="text" value='[uhsp id="<?= $id ?>"]'>
+        <p class="description"><?= _e('Copy the shortcode above to place the slider on your page.', $this->translate_key) ?></p>
+    </td>
+</tr>

@@ -149,7 +149,7 @@ class SlidePageTaxonomy implements Registerable
         $id = $slide_page->term_id;
         $meta = static::get_option($id);
 
-        echo $this->plugin->render_template('slide_page_edit_form_fields.php', ['meta' => $meta]);
+        echo $this->plugin->render_template('slide_page_edit_form_fields.php', ['meta' => $meta, 'id' => $id]);
     }
 
     /**
@@ -181,7 +181,7 @@ class SlidePageTaxonomy implements Registerable
     public function table_heading($headings)
     {
         $cb = array_splice($headings, 0, 1);
-        $headings = $cb + [self::TAXONOMY . '_id' => __('ID', $this->translate_key)] + $headings;
+        $headings = $cb + [self::TAXONOMY . '_shortcode' => __('Shortcode', $this->translate_key)] + $headings;
         return $headings;
     }
 
@@ -194,8 +194,8 @@ class SlidePageTaxonomy implements Registerable
      */
     public function table_column($value, $col_name, $id)
     {
-        if ($col_name === self::TAXONOMY . '_id') {
-            return $id;
+        if ($col_name === self::TAXONOMY . '_shortcode') {
+            return "<pre style=\"display: inline-block; background-color: white; margin: 1px 5px\">[uhsp id=\"{$id}\"]</pre>";
         }
     }
 
