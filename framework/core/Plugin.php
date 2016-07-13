@@ -36,6 +36,12 @@ abstract class Plugin
     public $slug = 'my-plugin';
 
     /**
+     * The translate key to use for all translations.
+     * @var string
+     */
+    public $translate_key = 'my-plugin';
+
+    /**
      * The theme version.
      * @var string
      */
@@ -89,6 +95,12 @@ abstract class Plugin
     protected $menu_pages = [];
 
     /**
+     * Options to automatically register for the plugin.
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * A list of hooks and their method registration.
      * @var array
      */
@@ -132,6 +144,9 @@ abstract class Plugin
         // array of constants. Same goes for URI's.
         $this->directories = array_merge($this->_directories, $this->directories);
         $this->uris = array_merge($this->_uris, $this->uris);
+
+        // Set the translate key.
+        $this->translate_key = $this->slug;
     }
 
     /**
@@ -215,7 +230,7 @@ abstract class Plugin
     public function check_user_permission($permission)
     {
         if (!call_user_func([$this, 'user_can_' . $permission])) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+            wp_die(__('You do not have sufficient permissions to access this page.'), $this->translate_key);
         }
     }
 
@@ -548,8 +563,8 @@ abstract class Plugin
 
                     return [
                         $menu_page['menu_slug'],
-                        __($submenu_page['page_title'], $this->slug),
-                        __($submenu_page['menu_title'], $this->slug),
+                        __($submenu_page['page_title'], $this->translate_key),
+                        __($submenu_page['menu_title'], $this->translate_key),
                         $submenu_page['capability'],
                         $submenu_page['menu_slug'],
                         [$this, $submenu_page['method']],
@@ -561,8 +576,8 @@ abstract class Plugin
             // array to prepare it for a function call.
             return [
                 'menu_page' => [
-                    __($menu_page['page_title'], $this->slug),
-                    __($menu_page['menu_title'], $this->slug),
+                    __($menu_page['page_title'], $this->translate_key),
+                    __($menu_page['menu_title'], $this->translate_key),
                     $menu_page['capability'],
                     $menu_page['menu_slug'],
                     [$this, $menu_page['method']],
