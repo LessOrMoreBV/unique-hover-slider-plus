@@ -40,8 +40,21 @@ class SlidePageTaxonomy implements Registerable
 
     /**
      * The taxonomy key.
+     * @var string
      */
     const TAXONOMY = 'slide_page';
+
+    /**
+     * The default overlay opacity.
+     * @var string
+     */
+    const DEFAULT_OPACITY = '75%';
+
+    /**
+     * The default overlay color.
+     * @var string
+     */
+    const DEFAULT_COLOR = '#334D5C';
 
     /**
      * Registers the taxonomy.
@@ -90,6 +103,35 @@ class SlidePageTaxonomy implements Registerable
     }
 
     /**
+     * Parses the input to make proper values all the time.
+     * @param  array $input
+     * @return array
+     */
+    public function parse_input($input)
+    {
+        // The arrow_buttons property should be a tinyint property.
+        $arrow_buttons = (int) array_key_exists('arrow_buttons', $input);
+
+        // Color has to be a valid hex color code.
+        $overlay_color = strtoupper($input['overlay_color']);
+        if (!preg_match("/\^#?[A-F0-9]{6}$/", $overlay_color)) $overlay_color = static::DEFAULT_COLOR;
+        if (substr($overlay_color, 0, 1) !== '#') $overlay_color = '#' . $overlay_color;
+
+        // Opacity has to be between 0 - 100 with a percentage sign.
+        $overlay_opacity = ( strlen($input['overlay_opacity']) > 0 ? $input['overlay_opacity'] : static::DEFAULT_OPACITY );
+        $overlay_opacity = (int) str_replace('%', '', $overlay_opacity);
+        if ($overlay_opacity < 0) $overlay_opacity = 0;
+        if ($overlay_opacity > 100) $overlay_opacity = 100;
+        $overlay_opacity = (string) $overlay_opacity . '%';
+
+        return [
+            'arrow_buttons' => $arrow_buttons,
+            'overlay_color' => $overlay_color,
+            'overlay_opacity' => $overlay_opacity,
+        ];
+    }
+
+    /**
      * Adds extra form fields to the create new taxonomy page.
      * @return void
      */
@@ -118,12 +160,12 @@ class SlidePageTaxonomy implements Registerable
     public function save_custom_meta($id)
     {
         if (isset($_POST[self::TAXONOMY . '_meta'])) {
-            // Manually set the arrow option to a boolean value.
-            $_POST[self::TAXONOMY . '_meta']['arrow_buttons'] = (int) array_key_exists('arrow_buttons', $_POST[self::TAXONOMY . '_meta']);
+            // Parse received input.
+            $input = $this->parse_input($_POST[self::TAXONOMY . '_meta']);
 
             $meta = static::get_option($id);
 
-            foreach ($_POST[self::TAXONOMY . '_meta'] as $key => $value) {
+            foreach ($input as $key => $value) {
                 $meta[$key] = $value;
             }
 
