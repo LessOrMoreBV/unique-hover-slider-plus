@@ -110,6 +110,7 @@ class SlidePostType implements Registerable
     public function table_heading($headings)
     {
         $headings[self::POST_TYPE . '_order'] = __('Order', $this->translate_key);
+        $headings[self::POST_TYPE . '_slider'] = __('Slider', $this->translate_key);
         return $headings;
     }
 
@@ -124,6 +125,14 @@ class SlidePostType implements Registerable
 
         if ($col_name === self::POST_TYPE . '_order') {
             echo $post->menu_order;
+        }
+
+        if ($col_name == self::POST_TYPE . '_slider') {
+            $terms = wp_get_post_terms($post->ID, SlidePageTaxonomy::TAXONOMY);
+            $terms = array_map(function($term) {
+                return $term->name;
+            }, $terms);
+            echo implode(', ', $terms);
         }
     }
 
