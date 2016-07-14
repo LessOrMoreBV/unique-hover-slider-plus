@@ -58,7 +58,7 @@ class UniqueHoverSliderPlus extends Plugin
      * The theme version.
      * @var string
      */
-    public $version = '0.1.0';
+    public $version = '1.0.0';
 
     /**
      * Hooks automatically registered during the boot
