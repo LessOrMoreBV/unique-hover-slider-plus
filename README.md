@@ -1,3 +1,5 @@
+![Unique Hover Slider Plus](https://files.slack.com/files-pri/T0CBAGZCN-F1RLW7TH8/uhsp-logom.png "Unique Hover Slider Plus")
+
 # Less or More WP Plugins // Unique Hover Slider Plus
 
 A cool slider with unique hover functionality that you won't find anywhere else!
