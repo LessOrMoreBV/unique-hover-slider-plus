@@ -1,5 +1,5 @@
 (function($) {
     $(function() {
-        $('.colorpicker').colorPicker();
+        $('.uhsp-colorpicker').colorPicker();
     });
 })(jQuery);

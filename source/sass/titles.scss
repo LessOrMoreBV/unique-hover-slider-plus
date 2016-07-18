@@ -37,12 +37,12 @@
 
         .uhsp-hover-bar {
             @include transition(left .3s ease);
+            box-sizing: border-box;
             height: 2px;
             padding: 0 3%;
             position: absolute;
             top: -1px;
             .uhsp-hover-bar-color {
-                background-color: $uhsp-yellow;
                 height: 2px;
                 width: 100%;
             }
@@ -58,17 +58,17 @@
             li.uhsp-title {
                 cursor: pointer;
                 float: left;
-                line-height: 1.6;
+                line-height: 1;
                 text-align: center;
 
                 h2.uhsp-slide-title {
                     @include transition(opacity .3s ease);
-                    color: $uhsp-yellow;
                     cursor: pointer;
                     font-size: 30px;
                     font-weight: 400;
                     margin: 5px 0 0;
                     opacity: 0.3;
+                    padding: 0;
                 }
 
                 .uhsp-slide-subtitle {
@@ -76,7 +76,7 @@
                     color: white;
                     font-size: 12px;
                     font-weight: 400;
-                    margin: 0;
+                    margin: 8px 0 0;
                     opacity: 0.3;
                     width: 100%;
                 }
@@ -84,7 +84,6 @@
                 &.selected {
                     h2.uhsp-slide-title {
                         opacity: 1;
-                        padding: 0;
                     }
                     .uhsp-slide-subtitle {
                         opacity: 1;
