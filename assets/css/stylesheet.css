@@ -286,13 +286,13 @@
   -o-transition: left 0.3s ease;
   -webkit-transition: left 0.3s ease;
   transition: left 0.3s ease;
+  box-sizing: border-box;
   height: 2px;
   padding: 0 3%;
   position: absolute;
   top: -1px;
 }
 .uhsp-slider-wrapper .uhsp-slider-titles .uhsp-hover-bar .uhsp-hover-bar-color {
-  background-color: #F5C949;
   height: 2px;
   width: 100%;
 }
@@ -306,7 +306,7 @@
 .uhsp-slider-wrapper .uhsp-slider-titles ul.uhsp-title-list li.uhsp-title {
   cursor: pointer;
   float: left;
-  line-height: 1.6;
+  line-height: 1;
   text-align: center;
 }
 .uhsp-slider-wrapper .uhsp-slider-titles ul.uhsp-title-list li.uhsp-title h2.uhsp-slide-title {
@@ -314,12 +314,12 @@
   -o-transition: opacity 0.3s ease;
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
-  color: #F5C949;
   cursor: pointer;
   font-size: 30px;
   font-weight: 400;
   margin: 5px 0 0;
   opacity: 0.3;
+  padding: 0;
 }
 .uhsp-slider-wrapper .uhsp-slider-titles ul.uhsp-title-list li.uhsp-title .uhsp-slide-subtitle {
   -moz-transition: opacity 0.3s ease;
@@ -329,13 +329,12 @@
   color: white;
   font-size: 12px;
   font-weight: 400;
-  margin: 0;
+  margin: 8px 0 0;
   opacity: 0.3;
   width: 100%;
 }
 .uhsp-slider-wrapper .uhsp-slider-titles ul.uhsp-title-list li.uhsp-title.selected h2.uhsp-slide-title {
   opacity: 1;
-  padding: 0;
 }
 .uhsp-slider-wrapper .uhsp-slider-titles ul.uhsp-title-list li.uhsp-title.selected .uhsp-slide-subtitle {
   opacity: 1;
