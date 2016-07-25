@@ -124,6 +124,7 @@ class UniqueHoverSliderPlus extends Plugin
     public function admin_assets()
     {
         $this->enqueue_script('colorpicker', 'js/colorpicker.js', ['jquery']);
+        $this->enqueue_style('style', 'css/stylesheet.min.css');
     }
 
     /**
