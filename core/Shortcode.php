@@ -60,6 +60,18 @@ abstract class Shortcode {
     protected $directories = [];
 
     /**
+     * Default URI's.
+     * @var array
+     */
+    protected $_uris = [];
+
+    /**
+     * URI's that the user can extend.
+     * @var array
+     */
+    protected $uris = [];
+
+    /**
      * Defualt hooks.
      * @var array
      */
