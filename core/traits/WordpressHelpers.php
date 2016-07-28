@@ -142,9 +142,19 @@ trait WordpressHelpers {
                 if (!$this->has_plugin($key)) {
                     // If the plugin is required, we'll show an error.
                     if (array_key_exists('required', $plugin) && $plugin['required']) {
+                        // If the message is specifically suppressed by the user, we won't display it.
+                        if (array_key_exists('show_message', $plugin) && $plugin['show_message'] === false) {
+                            continue;
+                        }
+
                         $this->admin_error($key, $this->name . ' requires you to install the plugin "' . $plugin['name'] . '".');
                     // If it's just recommended, we'll show a dismissable notice.
                     } else {
+                        // If the message is specifically suppressed by the user, we won't display it.
+                        if (array_key_exists('show_message', $plugin) && $plugin['show_message'] === false) {
+                            continue;
+                        }
+
                         $this->admin_notice($key, $this->name . ' recommends that you install the plugin "' . $plugin['name'] . '".');
                     }
                 }

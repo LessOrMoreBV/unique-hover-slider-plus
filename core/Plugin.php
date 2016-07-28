@@ -197,6 +197,25 @@ abstract class Plugin implements HandlesAssetsAndTranslateKey
     protected $_registered = [];
 
     /**
+     * Plugins that are required / recommended for the theme. You can check
+     * them at any point using $this->has_plugin($key).
+     * @var array
+     */
+    protected $plugins = [];
+
+    /**
+     * Errors to display in the admin panel.
+     * @var array
+     */
+    protected $admin_errors = [];
+
+    /**
+     * Notices to display in the admin panel.
+     * @var array
+     */
+    protected $admin_notices = [];
+
+    /**
      * Merges the URI and directory listings. Register all options,
      * actions and shortcodes. When finished call the boot method to
      * allow the user to take over post-initialization.

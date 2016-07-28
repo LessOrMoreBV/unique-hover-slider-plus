@@ -119,6 +119,32 @@ abstract class Shortcode {
     protected $root = '';
 
     /**
+     * Plugins that are required / recommended for the theme. You can check
+     * them at any point using $this->has_plugin($key).
+     * @var array
+     */
+    protected $plugins = [
+        'visual_composer' => [
+            'name' => 'Visual Composer',
+            'function' => 'vc_map',
+            'required' => false,
+            'show_message' => false,
+        ],
+    ];
+
+    /**
+     * Errors to display in the admin panel.
+     * @var array
+     */
+    protected $admin_errors = [];
+
+    /**
+     * Notices to display in the admin panel.
+     * @var array
+     */
+    protected $admin_notices = [];
+
+    /**
      * The parent class if applicable.
      * @var HandlesAssetsAndTranslateKey
      */
@@ -169,12 +195,20 @@ abstract class Shortcode {
             $this->set_parent($parent);
         }
 
+        // Check all of the plugins required for this theme.
+        $this->register_plugins();
+
         // Register the directories to the class.
         $this->register_directories();
         $this->register_actions();
 
         // Add the shortcode to WP.
         $this->add_shortcode($this->name, 'pre_callback');
+
+        // Register notices and errorsat the end of everything, so that by
+        // default the initialization notices will already be set, and will
+        // always be displayed correctly.
+        $this->register_messages();
 
         // Trigger an action so that the user can hook into our post-registration
         // event.
@@ -217,7 +251,9 @@ abstract class Shortcode {
             $this->translate_text_opts();
 
             // Map the shortcode to visual composer.
-            vc_map($this->vc_options);
+            if ($this->has_plugin('visual_composer')) {
+                vc_map($this->vc_options);
+            }
         }
     }
 
