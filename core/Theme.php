@@ -7,15 +7,17 @@ if (! defined('ABSPATH')) {
 }
 
 require_once('traits/WordpressHelpers.php');
+require_once('traits/RegistersMetaFields.php');
 require_once('contracts/HandlesAssetsAndTranslateKey.php');
 
 use UniqueHoverSliderPlus\Contracts\HandlesAssetsAndTranslateKey;
 use UniqueHoverSliderPlus\Traits\WordpressHelpers;
+use UniqueHoverSliderPlus\Traits\RegistersMetaFields;
 use WP_Customize_Color_Control;
 
 abstract class Theme implements HandlesAssetsAndTranslateKey
 {
-    use WordpressHelpers;
+    use WordpressHelpers, RegistersMetaFields;
 
     /**
      * The theme name.
@@ -93,6 +95,8 @@ abstract class Theme implements HandlesAssetsAndTranslateKey
         ['wp_enqueue_scripts', 'assets'],
         ['after_setup_theme', 'supports'],
         ['customize_register', 'register_customization_options'],
+        ['add_meta_boxes', 'register_meta_fields'],
+        ['save_post', 'save_meta', 1, 2],
     ];
 
     /**
@@ -213,10 +217,38 @@ abstract class Theme implements HandlesAssetsAndTranslateKey
     protected $customization = [];
 
     /**
+     * Meta fields to register.
+     * @var array
+     */
+    protected $meta_fields = [];
+
+    /**
+     * Plugins that are required / recommended for the theme. You can check
+     * them at any point using $this->has_plugin($key).
+     * @var array
+     */
+    protected $plugins = [];
+
+    /**
+     * Errors to display in the admin panel.
+     * @var array
+     */
+    protected $admin_errors = [];
+
+    /**
+     * Notices to display in the admin panel.
+     * @var array
+     */
+    protected $admin_notices = [];
+
+    /**
      * Initializes the theme.
      */
     public function __construct()
     {
+        // Generate the nonces for meta fields.
+        $this->generate_nonces_and_field_names();
+
         // Boot the WP Helper trait.
         $this->init_wp_helpers();
 
@@ -326,37 +358,49 @@ abstract class Theme implements HandlesAssetsAndTranslateKey
      */
     public function register_customization_options($wp_customize)
     {
-        // Check if there are colors to register.
-        if (array_key_exists('colors', $this->customization)) {
-            $this->register_color_customization($wp_customize);
+        // Loop through all options to register them.
+        foreach ($this->customization as $key => $customization) {
+            $this->register_customization($key, $customization, $wp_customize);
         }
-
-        // #TODO: Add more customization settings.
     }
 
     /**
-     * Registers all colors listed under the 'color' key in the
-     * customization options.
-     * @param WP_Customize_Manager $wp_customize
+     * Registers all contact options under the 'contact' key
+     * as customization options.
+     * @param  string               $key
+     * @param  array                $customization
+     * @param  WP_Customize_Manager $wp_customize
      * @return void
      */
-    public function register_color_customization($wp_customize)
+    public function register_customization($key, $customization, $wp_customize)
     {
-        $wp_customize->add_section($this->prefix('colors'), [
-            'title' => __('Theme Colors', $this->translate_key),
-            'priority' => 200,
+        $wp_customize->add_section($this->prefix($key), [
+            'title' => __($customization['title'], $this->translate_key),
+            'priority' => $customization['priority'],
         ]);
 
-        foreach ($this->customization['colors'] as $color) {
-            $wp_customize->add_setting($color['name'], [
-                'default' => $color['default'],
+        foreach ($customization['options'] as $option) {
+            $wp_customize->add_setting($option['name'], [
+                'default' => $option['default'],
             ]);
 
-            $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, $color['name'], [
-                'label' => __($color['label'], $this->translate_key),
-                'section' => $this->prefix('colors'),
-                'settings' => $color['name'],
-            ]));
+            // If the customizatino option is a color, we'll have to
+            // register it as a WP_Customize_Color_Control.
+            if ($option['type'] === 'color') {
+                $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, $option['name'], [
+                    'label' => __($option['label'], $this->translate_key),
+                    'section' => $this->prefix($key),
+                    'settings' => $option['name'],
+                ]));
+            // Otherwise we can just register it normally.
+            } else {
+                $wp_customize->add_control($option['name'], [
+                    'label' => __($option['label'], $this->translate_key),
+                    'section' => $this->prefix($key),
+                    'type' => $option['type'],
+                    'settings' => $option['name'],
+                ]);
+            }
         }
     }
 

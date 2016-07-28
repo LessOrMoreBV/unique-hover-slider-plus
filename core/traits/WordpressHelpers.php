@@ -54,6 +54,50 @@ trait WordpressHelpers {
     }
 
     /**
+     * Checks if the function associated with the given plugin exists
+     * in the current function list.
+     * @param  string  $key
+     * @return boolean
+     */
+    public function has_plugin($key)
+    {
+        if (array_key_exists($key, $this->plugins)) {
+            return function_exists($this->plugins[$key]['function']);
+        }
+
+        return false;
+    }
+
+    /**
+     * Adds an error to the error message stack.
+     * @param  string $key
+     * @param  string $message
+     * @return void
+     */
+    public function admin_error($key, $message)
+    {
+        $this->admin_errors[$key] = $message;
+    }
+
+    /**
+     * Adds a notice to the notice message stack.
+     * @param  string $key
+     * @param  string $message
+     * @return void
+     */
+    public function admin_notice($key, $message)
+    {
+        $this->admin_notices[$key] = $message;
+    }
+
+    // ooooo              o8o      .
+    // `888'              `"'    .o8
+    //  888  ooo. .oo.   oooo  .o888oo
+    //  888  `888P"Y88b  `888    888
+    //  888   888   888   888    888
+    //  888   888   888   888    888 .
+    // o888o o888o o888o o888o   "888"
+    /**
      * Boots all trait magic.
      * @return void
      */
@@ -62,6 +106,9 @@ trait WordpressHelpers {
         // Lots of things go through translations, let's make
         // sure our key is set for it.
         $this->check_translation_key();
+
+        // Check all of the plugins required for this theme.
+        $this->register_plugins();
 
         // Register basic properties.
         $this->register_directories();
@@ -77,6 +124,32 @@ trait WordpressHelpers {
         $this->register_post_types();
         $this->register_taxonomies();
         $this->register_shortcodes();
+
+        // Register notices and errorsat the end of everything, so that by
+        // default the initialization notices will already be set, and will
+        // always be displayed correctly.
+        $this->register_messages();
+    }
+
+    /**
+     * Sets messages for listed plugins that aren't activated.
+     * @return void
+     */
+    public function register_plugins()
+    {
+        if (isset($this->plugins) && count($this->plugins) > 0) {
+            foreach ($this->plugins as $key => $plugin) {
+                if (!$this->has_plugin($key)) {
+                    // If the plugin is required, we'll show an error.
+                    if (array_key_exists('required', $plugin) && $plugin['required']) {
+                        $this->admin_error($key, $this->name . ' requires you to install the plugin "' . $plugin['name'] . '".');
+                    // If it's just recommended, we'll show a dismissable notice.
+                    } else {
+                        $this->admin_notice($key, $this->name . ' recommends that you install the plugin "' . $plugin['name'] . '".');
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -205,6 +278,29 @@ trait WordpressHelpers {
     {
         if ($this->has_dir('languages')) {
             load_theme_textdomain($this->translate_key, $this->get_dir('languages'));
+        }
+    }
+
+    /**
+     * Registers all errors and notices as actions.
+     * @return void
+     */
+    public function register_messages()
+    {
+        if ($this->has_template('admin/error.php')) {
+            foreach ($this->admin_errors as $key => $error) {
+                add_action('admin_notices', function() use ($key, $error) {
+                    echo $this->render_template('admin/error.php', ['key' => $key, 'error' => __($error, $this->translate_key)]);
+                });
+            }
+        }
+
+        if ($this->has_template('admin/notice.php')) {
+            foreach ($this->admin_notices as $key => $notice) {
+                add_action('admin_notices', function() use ($key, $notice) {
+                    echo $this->render_template('admin/notice.php', ['key' => $key, 'notice' => __($notice, $this->translate_key)]);
+                });
+            }
         }
     }
 
@@ -544,6 +640,16 @@ trait WordpressHelpers {
     {
         $file = $this->trim_prepended_slash($file);
         return $this->get_dir('templates') . "/{$file}";
+    }
+
+    /**
+     * Checks if a given template exists.
+     * @param  string  $file
+     * @return boolean
+     */
+    public function has_template($file)
+    {
+        return file_exists($this->get_dir('templates') . "/{$file}");
     }
 
     /**

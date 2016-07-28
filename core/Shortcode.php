@@ -12,6 +12,7 @@ require_once('traits/WordpressHelpers.php');
 
 use UniqueHoverSliderPlus\Contracts\HandlesAssetsAndTranslateKey;
 use UniqueHoverSliderPlus\Traits\WordpressHelpers;
+use WP_Query;
 
 abstract class Shortcode {
     use WordpressHelpers;
@@ -58,6 +59,18 @@ abstract class Shortcode {
      * @var array
      */
     protected $directories = [];
+
+    /**
+     * Default URI's.
+     * @var array
+     */
+    protected $_uris = [];
+
+    /**
+     * URI's that the user can extend.
+     * @var array
+     */
+    protected $uris = [];
 
     /**
      * Defualt hooks.
@@ -123,6 +136,24 @@ abstract class Shortcode {
     ];
 
     /**
+     * Query params that cannot be overwritten through the shortcode.
+     * @var array
+     */
+    public $_query = [];
+
+    /**
+     * Query params that can be overwritten through the shortcode.
+     * @var array
+     */
+    public $query = [];
+
+    /**
+     * Default values of attributes if they're not passed as param.
+     * @var array
+     */
+    public $default_attributes = [];
+
+    /**
      * Initializes the shortcode.
      * @event '*_shortcode_registered'
      */
@@ -143,7 +174,7 @@ abstract class Shortcode {
         $this->register_actions();
 
         // Add the shortcode to WP.
-        $this->add_shortcode($this->name, $this->callback);
+        $this->add_shortcode($this->name, 'pre_callback');
 
         // Trigger an action so that the user can hook into our post-registration
         // event.
@@ -209,5 +240,167 @@ abstract class Shortcode {
                 }
             }
         }
+    }
+
+    /**
+     * The actual shortcode callback, will call the user callback after
+     * preparing the WP_Query.
+     * @param  array  $attributes
+     * @param  string $content
+     * @return string
+     */
+    public function pre_callback($attributes, $content)
+    {
+        // If no attributes are set, we have to default to an empty array.
+        if (!$attributes) {
+            $attributes = [];
+        }
+
+        // Make sure certain attributes have a required default value.
+        $attributes = array_merge($this->default_attributes, $attributes);
+
+        // If we don't have any query params, we have nothing to process.
+        // Let's just go to the user callback directly.
+        if (count($this->_query) === 0 && count($this->query) === 0) {
+            // Make sure all attributes are correct before sending them to the template.
+            $attributes = $this->validate_attributes($attributes);
+            return call_user_func_array([$this, $this->callback], [$attributes, $content]);
+        }
+
+        // Generates a query from the attributes. Note that the $query and $_query
+        // properties decide if we should have a query at all.
+        $query = $this->generate_query_from_attributes($attributes);
+
+        // Make sure all attributes are correct before sending them to the template.
+        // Note that we do this after generating the query, because the query generator
+        // will call the validation on just the query params, and doing double validation
+        // could mess up the attributes.
+        $attributes = $this->validate_attributes($attributes);
+
+        return call_user_func_array([$this, $this->callback], [$attributes, $content, $query]);
+    }
+
+    /**
+     * Generates a query using the $attributes passed through the shortcode,
+     * comparing them to the $query values that are writeable, and merging
+     * them with the static $_query values.
+     * @param  array    $attributes
+     * @return WP_Query
+     */
+    public function generate_query_from_attributes($attributes)
+    {
+        // If we do have query params however, we'll start building the WP Query by
+        // merging the params together.
+        $query_params = [];
+        foreach ($this->query as $param => $default_value) {
+            // If the given param exists in the attribute set,
+            // we'll overwrite the default value.
+            $value = $default_value;
+            if (array_key_exists($param, $attributes)) {
+                $value = $attributes[$param];
+            }
+
+            // Attach it as a query param.
+            $query_params[$param] = $value;
+        }
+
+        // Merge the required params over our query params.
+        $query_params = array_merge($query_params, $this->_query);
+
+        // Validate the query params separate to make sure that our
+        // WP Query call will be valid.
+        $query_params = $this->validate_attributes($query_params);
+
+        // Now we should be certain that the query params won't break a
+        // query call, so let's make a query and attach it to the callback.
+        return new WP_Query($query_params);
+    }
+
+    /**
+     * Validates all parameters if the validation function
+     * for them exists.
+     * @param  array $params
+     * @return array
+     */
+    public function validate_attributes($attributes)
+    {
+        array_walk($attributes, function(&$value, $attribute) {
+            // If we have a validation method for the given param,
+            // we'll overwrite it's value.
+            if (method_exists($this, 'validate_' . $attribute)) {
+                $value = $this->{'validate_' . $attribute}($value);
+            }
+        });
+
+        return $attributes;
+    }
+
+    /**
+     * Validates the count query param.
+     * @param  string  $value
+     * @return integer
+     */
+    public function validate_count($value)
+    {
+        // Count has to be numeric.
+        if (!is_numeric($value)) {
+            $value = -1;
+        }
+
+        // If we passed the numeric check we can safely cast it as integer.
+        $value = (int) $value;
+
+        // Value cannot be less than -1.
+        if ($value < -1) {
+            $value = -1;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Orderby can only be a set of pre-defined properties, as dicated
+     * by Wordpress.
+     * @param  string $value
+     * @return string
+     */
+    public function validate_orderby($value)
+    {
+        if (!in_array($value, [
+            'none',
+            'ID',
+            'author',
+            'title',
+            'name',
+            'type',
+            'date',
+            'modified',
+            'parent',
+            'rand',
+            'comment_count',
+            'menu_order',
+            'meta_value',
+            'meta_value_num',
+            'post__in',
+            'post_name__in',
+        ])) {
+            $value = 'none';
+        }
+
+        return $value;
+    }
+
+    /**
+     * Order can be either ascending or descending.
+     * @param  string $value
+     * @return string
+     */
+    public function validate_order($value)
+    {
+        if (!in_array($value, ['ASC', 'DESC'])) {
+            $value = 'DESC';
+        }
+
+        return $value;
     }
 }
