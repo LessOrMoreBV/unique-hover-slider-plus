@@ -1,16 +1,16 @@
 <div class="form-field">
     <label for="title_color"><?= _e('Title color', $this->translate_key) ?></label>
-    <input type="text" name="slide_page_meta[title_color]" id="title_color" value="#F5C949" class="colorpicker">
+    <input type="text" name="slide_page_meta[title_color]" id="title_color" value="#F5C949" class="uhsp-colorpicker">
     <p><?= _e('Set a hexadecimal color code for the title text and the hover bar.', $this->translate_key) ?></p>
 </div>
 <div class="form-field">
     <label for="subtitle_color"><?= _e('Subtitle color', $this->translate_key) ?></label>
-    <input type="text" name="slide_page_meta[subtitle_color]" id="subtitle_color" value="#FFFFFF" class="colorpicker">
+    <input type="text" name="slide_page_meta[subtitle_color]" id="subtitle_color" value="#FFFFFF" class="uhsp-colorpicker">
     <p><?= _e('Set a hexadecimal color code for the subtitle text.', $this->translate_key) ?></p>
 </div>
 <div class="form-field">
     <label for="overlay_color"><?= _e('Overlay color', $this->translate_key) ?></label>
-    <input type="text" name="slide_page_meta[overlay_color]" id="overlay_color" value="#334D5C" class="colorpicker">
+    <input type="text" name="slide_page_meta[overlay_color]" id="overlay_color" value="#334D5C" class="uhsp-colorpicker">
     <p><?= _e('Set a hexadecimal color code for the overlay that covers the slider.', $this->translate_key) ?></p>
 </div>
 <div class="form-field">

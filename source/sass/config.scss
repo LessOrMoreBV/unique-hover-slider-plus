@@ -6,8 +6,6 @@
 @mixin tablet {  &[max-width~="1024px"] { @content; }  }
 @mixin desktop { &[max-width~="1480px"] { @content; }  }
 
-$uhsp-blue:           #334D5C;
-$uhsp-yellow:         #F5C949;
 $uhsp-height-mobile:  400px;
 $uhsp-height-tablet:  600px;
 $uhsp-height-desktop: 700px;

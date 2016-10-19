@@ -6,7 +6,7 @@ if (! defined('ABSPATH')) {
 
 /**
  * @package Unique Hover Slider Plus
- * @version 0.1.0
+ * @version 1.1.0
  */
 /*
 Plugin Name: Unique Hover Slider Plus
@@ -14,19 +14,13 @@ Plugin URI: http://www.lessormore.nl
 Description: A slider with a unique hover.
 Author: Less or More
 Author URI: http://www.lessormore.nl
-Version: 0.1.0
+Version: 1.1.0
 License: GNU General Public License
 License URI: licence/GPL.txt
 */
 
-
-require_once('framework/core/Plugin.php');
-require_once('framework/post-types/SlidePostType.php');
-require_once('framework/taxonomies/SlidePageTaxonomy.php');
-
-use UniqueHoverSliderPlus\Core\Plugin;
-use UniqueHoverSliderPlus\PostTypes\SlidePostType;
-use UniqueHoverSliderPlus\Taxonomies\SlidePageTaxonomy;
+require_once('core/Plugin.php');
+use UniqueHoverSliderPlus\Plugin;
 
 class UniqueHoverSliderPlus extends Plugin
 {
@@ -58,7 +52,7 @@ class UniqueHoverSliderPlus extends Plugin
      * The theme version.
      * @var string
      */
-    public $version = '1.0.0';
+    public $version = '1.1.0';
 
     /**
      * Hooks automatically registered during the boot
@@ -87,7 +81,23 @@ class UniqueHoverSliderPlus extends Plugin
      * @var string
      */
     protected $shortcodes = [
-        ['uhsp', 'render_slider'],
+        UniqueHoverSliderPlus\Shortcodes\Slider::class,
+    ];
+
+    /**
+     * The post types to register.
+     * @var array.
+     */
+    protected $post_types = [
+        UniqueHoverSliderPlus\PostTypes\Slide::class,
+    ];
+
+    /**
+     * The taxonomies to register.
+     * @var array
+     */
+    protected $taxonomies = [
+        UniqueHoverSliderPlus\PostTypes\SlidePage::class,
     ];
 
     /**
@@ -99,9 +109,6 @@ class UniqueHoverSliderPlus extends Plugin
         // Image sizes required for the foreground icon.
         add_image_size('uhsp-foreground-icon@2x', 740, 500, true);
         add_image_size('uhsp-foreground-icon', 370, 250, true);
-
-        $this->register_post_type(new SlidePostType);
-        $this->register_taxonomy(new SlidePageTaxonomy);
     }
 
     /**
@@ -124,6 +131,7 @@ class UniqueHoverSliderPlus extends Plugin
     public function admin_assets()
     {
         $this->enqueue_script('colorpicker', 'js/colorpicker.js', ['jquery']);
+        $this->enqueue_style('style', 'css/stylesheet.min.css');
     }
 
     /**

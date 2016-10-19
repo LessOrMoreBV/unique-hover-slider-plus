@@ -5,7 +5,7 @@
          * Function to hide an element.
          * @return {void}
          */
-        $.fn.hide = function() {
+        $.fn.uhspHide = function() {
             this.css("display" , "none");
         };
 
@@ -13,7 +13,7 @@
          * Function to show an element.
          * @return {void}
          */
-        $.fn.show = function() {
+        $.fn.uhspShow = function() {
             this.css("display" , "inline-block");
         };
 
@@ -69,15 +69,15 @@
          * Hide arrows when there are no more slides then the one(s) visible.
          */
         if (availableSlides <= getVisibleSlideCount()) {
-            rightArrow.hide();
-            leftArrow.hide();
+            rightArrow.uhspHide();
+            leftArrow.uhspHide();
         };
 
         /**
          * Hide left arrow when there's just one more slide then the one(s) visible.
          */
         if (availableSlides == (getVisibleSlideCount() * 2)) {
-            leftArrow.hide();
+            leftArrow.uhspHide();
         };
 
         /**
@@ -92,12 +92,12 @@
             i++;
 
             if (i >= availableSlides - getVisibleSlideCount()) {
-                $(this).hide();
+                $(this).uhspHide();
             }
 
             slideSlider();
             changeTitleState();
-            leftArrow.show();
+            leftArrow.uhspShow();
         });
 
         /**
@@ -112,12 +112,12 @@
             i--;
 
             if (i <= 0) {
-                $(this).hide();
+                $(this).uhspHide();
             }
 
             slideSlider();
             changeTitleState();
-            rightArrow.show();
+            rightArrow.uhspShow();
         });
 
         /**
@@ -129,14 +129,14 @@
          * @return {void}
          */
         $(".uhsp-title").on('click', function() {
-            rightArrow.hide();
-            leftArrow.hide();
+            rightArrow.uhspHide();
+            leftArrow.uhspHide();
             i = $(this).index();
             if (i > 0) {
-                leftArrow.show();
+                leftArrow.uhspShow();
             }
             if (i < (availableSlides - 1)) {
-                rightArrow.show();
+                rightArrow.uhspShow();
             }
 
             slideSlider();
