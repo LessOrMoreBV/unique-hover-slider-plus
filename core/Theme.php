@@ -249,11 +249,19 @@ abstract class Theme implements HandlesAssetsAndTranslateKey
         // Generate the nonces for meta fields.
         $this->generate_nonces_and_field_names();
 
+        // Check all of the plugins required for this theme.
+        $this->register_plugins();
+
         // Boot the WP Helper trait.
         $this->init_wp_helpers();
 
         // I don't really know what this is used for, I just copied it.
         $this->check_language_code();
+
+        // Register notices and errors at the end of everything, so that by
+        // default the initialization notices will already be set, and will
+        // always be displayed correctly.
+        $this->register_messages();
 
         // Call the boot method in case the user wants to do more.
         $this->boot();

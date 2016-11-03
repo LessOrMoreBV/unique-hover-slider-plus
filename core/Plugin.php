@@ -7,15 +7,17 @@ if (! defined('ABSPATH')) {
     exit('No direct script access allowed');
 }
 
+require_once('traits/RegistersMetaFields.php');
 require_once('traits/WordpressHelpers.php');
 require_once('contracts/HandlesAssetsAndTranslateKey.php');
 
 use UniqueHoverSliderPlus\Contracts\HandlesAssetsAndTranslateKey;
 use UniqueHoverSliderPlus\Traits\WordpressHelpers;
+use UniqueHoverSliderPlus\Traits\RegistersMetaFields;
 
 abstract class Plugin implements HandlesAssetsAndTranslateKey
 {
-    use WordpressHelpers;
+    use WordpressHelpers, RegistersMetaFields;
 
     /**
      * The plugin name.
@@ -91,6 +93,8 @@ abstract class Plugin implements HandlesAssetsAndTranslateKey
         ['admin_menu', 'menus'],
         ['init', 'init_language'],
         ['wp_enqueue_scripts', 'assets'],
+        ['add_meta_boxes', 'register_meta_fields'],
+        ['plugins_loaded', 'check_plugins'],
     ];
 
     /**
@@ -197,6 +201,12 @@ abstract class Plugin implements HandlesAssetsAndTranslateKey
     protected $_registered = [];
 
     /**
+     * Meta fields to register.
+     * @var array
+     */
+    protected $meta_fields = [];
+
+    /**
      * Plugins that are required / recommended for the theme. You can check
      * them at any point using $this->has_plugin($key).
      * @var array
@@ -222,11 +232,29 @@ abstract class Plugin implements HandlesAssetsAndTranslateKey
      */
     public function __construct()
     {
+        // Generate the nonces for meta fields.
+        $this->generate_nonces_and_field_names();
+
         // Boot the WP Helper trait.
         $this->init_wp_helpers();
 
         // Call a boot method to indicate that we're ready.
         $this->boot();
+    }
+
+    /**
+     * Check all plugins when they're done loading.
+     * @return void
+     */
+    public function check_plugins()
+    {
+        // Check all of the plugins required for this theme.
+        $this->register_plugins();
+
+        // Register notices and errors at the end of everything, so that by
+        // default the initialization notices will already be set, and will
+        // always be displayed correctly.
+        $this->register_messages();
     }
 
     /**

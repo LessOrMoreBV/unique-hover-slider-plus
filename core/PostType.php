@@ -64,9 +64,13 @@ abstract class PostType extends Registerable {
             // nonce and proper field name for all of the fields.
             $this->generate_nonces_and_field_names();
 
-            // If any fields are set we override the register_meta_box_cb
-            // option.
+            // Meta fields can be registered during the post type callback for it.
             $this->opts['register_meta_box_cb'] = 'register_meta_fields';
+
+            // Images for some reason have to listen to our custom registered
+            // hook, which makes no sense as to why they cannot be registered
+            // with the other meta fields, but fuck it.
+            array_push($this->_hooks, [$this->name . '_post_type_registered', 'register_meta_images']);
         }
 
         parent::wrap_callback_opts();
