@@ -234,6 +234,15 @@ trait RegistersMetaFields {
                 $value = $_POST[$props['meta_field_name']];
             }
 
+            // Try and sanitize the value.
+            if (isset($props['sanitize_method'])) {
+                $value = call_user_func($props['sanitize_method'], $value);
+            } else {
+                // If no sanitization method is defined, we'll force the default
+                // sanitize_text_field.
+                $value = sanitize_text_field($value);
+            }
+
             // Update the meta value.
             if (get_post_meta($post->ID, $field, false)) {
                 update_post_meta($post->ID, $field, $value);
@@ -275,6 +284,15 @@ trait RegistersMetaFields {
                     if (is_array($value)) {
                         $value = implode(',', $value);
                     }
+                }
+
+                // Try and sanitize the value.
+                if (isset($props['sanitize_method'])) {
+                    $value = call_user_func($props['sanitize_method'], $value);
+                } else {
+                    // If no sanitization method is defined, we'll force the default
+                    // sanitize_text_field.
+                    $value = sanitize_text_field($value);
                 }
 
                 // Update the meta value.
