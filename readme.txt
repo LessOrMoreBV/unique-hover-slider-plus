@@ -80,10 +80,13 @@ The slider uses the same font as the theme you use, but if you like you can add 
 
 == Changelog ==
 
-= 1.0 =
+= 1.1.2 =
+* WP plugin guideline compliance.
+
+= 1.0.0 =
 * Base plugin functionality.
 
 == Upgrade Notice ==
 
-= 1.0 =
-The original version: if you're upgrading to this version, thank you for installing!
+= 1.1.2 =
+The first version available on WP: if you're upgrading to this version, thank you for installing!
