@@ -70,7 +70,14 @@ abstract class Shortcode {
      * URI's that the user can extend.
      * @var array
      */
-    protected $uris = [];
+    protected $uris = [
+        'root' => '/',
+        'assets' => '/assets',
+        'styles' => '/assets/css',
+        'fonts' => '/assets/fonts',
+        'images' => '/assets/images',
+        'scripts' => '/assets/js',
+    ];
 
     /**
      * Defualt hooks.
@@ -162,6 +169,14 @@ abstract class Shortcode {
     ];
 
     /**
+     * Visual composer options that should be fetched from assets/images.
+     * @var array
+     */
+    protected $vc_image_options = [
+        'icon',
+    ];
+
+    /**
      * Query params that cannot be overwritten through the shortcode.
      * @var array
      */
@@ -247,8 +262,9 @@ abstract class Shortcode {
     {
         // Make sure we actually have some settings to map.
         if (!empty($this->vc_options)) {
-            // Translate the options.
+            // Parse the options.
             $this->translate_text_opts();
+            $this->replace_image_opts();
 
             // Map the shortcode to visual composer.
             if ($this->has_plugin('visual_composer')) {
@@ -274,6 +290,19 @@ abstract class Shortcode {
                 if (in_array($param_key, $this->vc_text_options)) {
                     $this->vc_options['params'][$i][$param_key] = __($param_opt, $this->translate_key);
                 }
+            }
+        }
+    }
+
+    /**
+     * Replaces images within the VC options.
+     * @return void
+     */
+    public function replace_image_opts()
+    {
+        foreach ($this->vc_options as $key => $opt) {
+            if (in_array($key, $this->vc_image_options)) {
+                $this->vc_options[$key] = $this->image($opt);
             }
         }
     }

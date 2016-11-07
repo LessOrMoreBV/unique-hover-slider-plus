@@ -8,11 +8,11 @@
             <tbody>
                 <tr>
                     <th scope="row"><?= _e('Some setting', $this->translate_key) ?></th>
-                    <td><input class="regular-text" type="text" name="uhsp-slider-some-setting" placeholder="Some setting..."></td>
+                    <td><input class="regular-text" type="text" name="uhsp-slider-some-setting" placeholder="<?= _e('Some setting...', $this->translate_key) ?>"></td>
                 </tr>
                 <tr>
                     <th scope="row"><?= _e('Some other setting', $this->translate_key) ?></th>
-                    <td><input class="regular-text" type="text" name="uhsp-slider-some-other-setting" placeholder="Some other setting..."></td>
+                    <td><input class="regular-text" type="text" name="uhsp-slider-some-other-setting" placeholder="<?= _e('Some other setting...', $this->translate_key) ?>"></td>
                 </tr>
             </tbody>
         </table>

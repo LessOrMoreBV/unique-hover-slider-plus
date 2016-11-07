@@ -2,6 +2,11 @@
 
 All Notable changes to `lom-wp-plugins\unique-hover-slider-plus` will be documented in this file.
 
+## 1.1.2 - 2016-11-07
+### Changed
+- POST input sanitization.
+- Readme overhauled to comply with WP guidelines.
+
 ## 1.1.1 - 2016-11-01
 ### Added
 - Required files to host plugin on Wordpress.org.

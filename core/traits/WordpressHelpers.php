@@ -62,7 +62,9 @@ trait WordpressHelpers {
     public function has_plugin($key)
     {
         if (array_key_exists($key, $this->plugins)) {
-            return function_exists($this->plugins[$key]['function']);
+            if (array_key_exists('function', $this->plugins[$key])) {
+                return function_exists($this->plugins[$key]['function']);
+            }
         }
 
         return false;
@@ -107,9 +109,6 @@ trait WordpressHelpers {
         // sure our key is set for it.
         $this->check_translation_key();
 
-        // Check all of the plugins required for this theme.
-        $this->register_plugins();
-
         // Register basic properties.
         $this->register_directories();
         $this->register_uris();
@@ -124,11 +123,6 @@ trait WordpressHelpers {
         $this->register_post_types();
         $this->register_taxonomies();
         $this->register_shortcodes();
-
-        // Register notices and errorsat the end of everything, so that by
-        // default the initialization notices will already be set, and will
-        // always be displayed correctly.
-        $this->register_messages();
     }
 
     /**
@@ -333,6 +327,7 @@ trait WordpressHelpers {
             'capability' => $this->capability,
             'menu_slug' => $this->slug,
             'icon' => 'dashicons-admin-post',
+            'position' => null,
             'children' => []
         ];
     }
@@ -391,6 +386,7 @@ trait WordpressHelpers {
 
             // Now we want to order the attributes as a non-indexed
             // array to prepare it for a function call.
+            $icon_is_asset = (strpos('.', $menu_page['icon']) !== false);
             return [
                 'menu_page' => [
                     __($menu_page['page_title'], $this->translate_key),
@@ -398,7 +394,8 @@ trait WordpressHelpers {
                     $menu_page['capability'],
                     $menu_page['menu_slug'],
                     [$this, $menu_page['method']],
-                    $this->asset($menu_page['icon']),
+                    ($icon_is_asset ? $this->asset($menu_page['icon']) : $menu_page['icon']),
+                    $menu_page['position'],
                 ],
                 'admin_submenu_pages' => $menu_page['children'],
             ];
