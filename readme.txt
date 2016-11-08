@@ -3,7 +3,7 @@ Contributors: lessormore
 Tags: slider
 Requires at least: 4.5.0
 Tested up to: 4.5.4
-Stable tag: 4.5
+Stable tag: 1.1.2
 License: http://www.gnu.org/licenses/gpl-3.0.html
 
 A cool slider with unique hover functionality that you won't find anywhere else!
