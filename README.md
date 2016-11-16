@@ -1,4 +1,4 @@
-![Unique Hover Slider Plus](http://i.imgur.com/SRGm08M.png "Unique Hover Slider Plus")
+![Unique Hover Slider Plus](http://i.imgur.com/cA3aPj0.jpg "Unique Hover Slider Plus")
 
 # Less or More WP Plugins // Unique Hover Slider Plus
 
