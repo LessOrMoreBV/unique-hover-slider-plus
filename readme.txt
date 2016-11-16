@@ -1,6 +1,6 @@
 === Unique Hover Slider Plus ===
 Contributors: lessormore
-Tags: slider
+Tags: slider, image slider, images, responsive slider, wordpress slider, slider plugin, slideshow
 Requires at least: 4.5.0
 Tested up to: 4.5.4
 Stable tag: 1.1.2
@@ -10,7 +10,20 @@ A cool slider with unique hover functionality that you won't find anywhere else!
 
 == Description ==
 
+= About =
 The Unique Hover Slider Plus is a slider unlike many other common sliders. It features a unique hover effect (hence the name) to increase user interaction. It does not slide through your slides by itself, but instead highlights the centerpiece. This makes it ideal for a full-width header on your homepage, as it manages to mix the captivating presence of a static header visual with the interaction of a sliding one.
+
+= Features =
+* 100% responsive for all screens and devices.
+* Compatible with all modern browsers.
+* Add up to 5 slides.
+* Select any text and overlay color you like.
+* Add titles and subtitles to your slides.
+* Add icon / foreground images to your slides.
+* Click the titles to slide.
+* Beautiful hover effects (demo: [lessormore.nl](http://lessormore.nl "Less or More BV")).
+* Option to disable navigation arrows.
+* Shortcode for easy insert into your website or use via Visual Composer.
 
 == Installation ==
 
@@ -77,6 +90,9 @@ The slider uses the same font as the theme you use, but if you like you can add 
 == Screenshots ==
 
 1. An example of the plugin in action.
+2. An example of the plugin in action.
+3. How to add a new slider.
+4. How to add slides to your slider.
 
 == Changelog ==
 
