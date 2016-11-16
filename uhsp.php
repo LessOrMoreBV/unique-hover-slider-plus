@@ -6,7 +6,7 @@ if (! defined('ABSPATH')) {
 
 /**
  * @package Unique Hover Slider Plus
- * @version 1.1.2
+ * @version 1.1.4
  */
 /*
 Plugin Name: Unique Hover Slider Plus
@@ -14,7 +14,7 @@ Plugin URI: http://www.lessormore.nl
 Description: A slider with a unique hover.
 Author: Less or More
 Author URI: http://www.lessormore.nl
-Version: 1.1.2
+Version: 1.1.4
 License: GNU General Public License
 License URI: licence/GPL.txt
 */
@@ -52,7 +52,7 @@ class UniqueHoverSliderPlus extends Plugin
      * The theme version.
      * @var string
      */
-    public $version = '1.1.2';
+    public $version = '1.1.4';
 
     /**
      * Hooks automatically registered during the boot

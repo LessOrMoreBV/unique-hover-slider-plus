@@ -2,6 +2,11 @@
 
 All Notable changes to `lom-wp-plugins\unique-hover-slider-plus` will be documented in this file.
 
+## 1.1.4 - 2016-11-16
+### Added
+- Banner to readme.
+- Lot of assets for WordPress.
+
 ## 1.1.2 - 2016-11-07
 ### Changed
 - POST input sanitization.
